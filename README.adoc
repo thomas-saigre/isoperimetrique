@@ -1,1 +1,1 @@
-={isoperimetrique} Résolution du problème isopérimétrique
+= Résolution du problème isopérimétrique
