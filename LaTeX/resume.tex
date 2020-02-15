@@ -1,0 +1,378 @@
+\documentclass[10pt,a4paper]{article}
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage[french]{babel}
+
+
+\usepackage{amsmath,amsthm,amsfonts,amssymb}
+% \usepackage{pgfplots}
+% \usepackage{listings}
+% \usepackage{graphicx}
+
+
+
+
+
+
+% Méta-données du pdf
+
+\title{Résolution du problème isopérimétrique}
+\author{Thomas Saigre, Romain Vallet}
+\usepackage{hyperref}
+\hypersetup{%
+	pdftitle={Résolution du problème isopérimétrique},
+	pdfauthor={Thomas Saigre, Romain Vallet},
+	pdfsubject={Projet d'optimisation M1 CSMI},
+}
+
+
+
+
+
+% Macros
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\Z}{\mathbb{Z}}
+\newcommand{\C}{\mathcal{C}}
+\renewcommand{\d}{\mathrm{d}}
+\renewcommand{\P}{\mathcal{P}}
+\renewcommand{\phi}{\varphi}
+\newcommand{\A}{\mathrm{Aire}}
+\newcommand{\p}{\mathrm{Per}}
+\newcommand{\IA}{\textsf{IA}}
+\newcommand{\IP}{\textsf{IP}}
+
+
+
+% Théorèmes
+\theoremstyle{plain}
+
+\newtheorem{thm}{Théorème}[section]
+\newtheorem{prop}[thm]{Proposition}
+\newtheorem{coro}[thm]{Corollaire}
+\newtheorem{lem}[thm]{Lemme}
+
+\theoremstyle{definition}
+
+\newtheorem{defi}[thm]{Définition}
+\newtheorem{ex}[thm]{Exemple}
+\newtheorem{nota}[thm]{Notation}
+
+\renewcommand{\qedsymbol}{$\blacksquare$}
+
+
+
+% Mise en page
+\usepackage{fancyhdr}
+\usepackage[left=2cm,right=2cm,top=2cm,bottom=2cm]{geometry}
+\pagestyle{fancy}
+\setlength{\headheight}{13pt}
+
+
+
+
+% Dessins
+\usepackage{pgf,tikz}
+\usetikzlibrary{arrows}
+\definecolor{ttttff}{rgb}{0.2,0.2,1}
+\definecolor{xdxdff}{rgb}{0.49,0.49,1}
+
+
+
+
+\begin{document}
+\renewcommand{\proofname}{\textbf{Preuve}}
+
+
+
+% Page de titre
+\thispagestyle{empty}
+
+
+\vspace*{\stretch{2}}
+
+\begin{center}
+
+{\LARGE \textsf{\textbf{Résolution du problème isopérimétrique\\}}}
+\rule{\linewidth}{0.5mm}
+
+\vspace{2\baselineskip}
+
+{\Large Projet d'optimisation}
+
+\vspace{\baselineskip}
+
+{\Large Master 1 -- CSMI \\ \vspace{0.5\baselineskip} Université de Strasbourg}
+% \vspace{\baselineskip}
+
+\vspace{2\baselineskip}
+
+{\sf \Large Thomas Saigre \& Romain Vallet}
+
+\vspace{2\baselineskip}
+
+\end{center}
+
+
+
+\vspace*{\stretch{1}}
+
+% \setcounter{tocdepth}{2}
+% \tableofcontents
+
+\vspace*{\stretch{1}}
+
+
+\newpage
+
+\begin{abstract}
+Résumé
+\end{abstract}
+
+
+
+
+%\chapter{Partie théorique}
+
+\section{Definition du problème isopérimétrique}
+
+\begin{defi}
+Un \emph{problème isopérimetrique} est un problème d'optimisation qui vise a trouver un domaine de $\R^2$ (plus d'autre conditions) qui maximise l'aire pour un périmètre constant :
+\[\max_{D \in \C} \A(D) \label{ia}\tag{\IA}\]
+Avec $\mathcal{C} = \{ D \subset\R^2, \p(D) = p_0 \}$ avec $p_0\in \R_+$ une constante et $C \in R^2$. ???
+
+
+\end{defi}
+
+\begin{defi}
+Un \emph{problème iso-aire} est un problème d'optimisation qui vise a trouver un domaine de $\R^2$ (plus d'autre conditions) qui minimise le périmètre pour une aire constante :
+\[\min_{D \in \C} \p(D) \label{ip}\tag{\IP}\]
+
+Avec $\mathcal{C} = \{ D \in C, Aire(D)=c \}$ avec $c \in R$ une constante et $C \in R^2$. ???
+\end{defi}
+
+
+Ces deux problèmes sont équivalents. Plus précisément :
+
+\begin{thm}[\cite{tapia09}]
+Le problème isopérimétrique et le problème iso-aire ont les mêmes solutions pour des choix compatibles de $p_0$ et $A_0$.
+\end{thm}
+
+
+\begin{proof}
+On se place dans le cas où $D$ est le domaine délimité par le graphe d'une fonction $y$ qui s'annule en $-l$ et en $l$. On a alors $\A(D)=\int y(x)\d x$, et $\p(D)=\int\sqrt{1+y'(x)^2}\d x$ (voir section \ref{sec:didon}). Ces quantités sont notées respectivement $\A(y)$ et $\p(y)$.
+
+Soit $y_A$ une solution de (\ref{ia}), et supposons par l'absurde que $y_A$ n'est pas solution de (\ref{ip}). Il existe alors un domaine $y_p$ tel que \[\A(y_p)>\A(y_A)\quad\text{et}\quad \p(y_p)=\p(y_a)\]
+Par croissance de l'intégrale, les fonctions $\alpha\mapsto\A(\alpha y)$ et $\alpha\mapsto\p(\alpha y)$ sont des fonctions croissantes.
+
+On choisit $\alpha<1$ tel que $\A(\alpha y_p)=\A(y_A)$. Alors $\p(\alpha y_p)<\p(y_A)$, ce qui est abstude car $y_A$ est solution de (\ref{ia}).
+
+Le sens réciproque se montre de la même manière.
+\end{proof}
+
+
+\section{Maximisation d'une surface à périmètre constant}
+
+\subsection{Énoncé du problème}
+
+Nous voulons résoudre le problème iso-périmétrique :
+\[\max_{z \in \mathcal{C}} \A(z) \label{eq:p}\tag{$\P$}\]
+
+
+Avec $\mathcal{C} = \{ z \in C^0([-\pi,\pi], R), z(-\pi)=z(\pi), |z'(s)|=1 \}$.
+
+Et $A(z) = \frac{1}{2} \int_{-\pi}^{\pi}{xdy-ydx}$.
+
+
+Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow R$ respectivement les parties réelle et imaginiare de $z$.
+
+\subsection[Résolution du problème]{Résolution du problème \cite{fuglede86}}
+
+
+
+\subsubsection{Théorie de Fourrier}
+
+On utlise la théorie de Fourrier ; Puisque $z$ est continue sur $[-a,a]$ et que $z(a)=z(-a)$, on a :
+
+\[ z(s) = \sum_{n \in \Z}{c_n e^{ins}} \]
+
+Avec $c_n = \frac{1}{2\pi} \int_{-\pi}^{\pi}{z(s)e^{-ins}ds}$.
+
+\subsubsection{Calcul}
+
+D'une part :
+\begin{eqnarray*}
+\frac{1}{2} Im \int_{-\pi}^{\pi}{\bar{z}(s) z'(s) ds} &=& \frac{1}{2} Im \int_{-\pi}^{\pi}{ \sum_{n\in \Z}{\bar{c_n} e^{-ins}} \sum_{m\in \Z}{imc_n e^{ims}} ds}\\
+&=& \frac{1}{2} Im \sum_{n,m\in \Z}{ im c_m \bar{c_n} \int_{-\pi}^{\pi}{e^{ims}e^{-ins}} } \\
+&=& \frac{1}{2} Im \sum_{n,m\in \Z}{ im c_m \bar{c_n} 2\pi \delta_{n,m} } \\
+&=& \pi Im( i\sum_{n\in \Z}{ n c_n \bar{c_n}}) \\
+&=& \pi \sum_{n\in \Z}{ n |c_n|^2}
+\end{eqnarray*}
+
+D'autre part :
+\begin{eqnarray*}
+\frac{1}{2} Im \int_{-\pi}^{\pi}{\bar{z}(s) z'(s) ds} &=& \frac{1}{2} Im \int_{-\pi}^{\pi}{(x(s)-iy(s)) (x'(s)+iy'(s)) ds} \\
+&=& \frac{1}{2} Im \int_{-\pi}^{\pi}{x(s)x'(s)+y(s)y'(s) + i(x(s)y'(s)-x'(s)y(s)) ds} \\
+&=& \frac{1}{2} \int_{-\pi}^{\pi}{x(s)y'(s)-x'(s)y(s) ds} \\
+&=& \frac{1}{2} \int_{-\pi}^{\pi}{xdy-ydx} \\
+&=& A
+\end{eqnarray*}
+
+Alors, on a :
+\[ A =  \pi \sum_{n\in \Z}{ n |c_n|^2} \]
+
+De plus :
+\[ \sum_{n\in \Z}{n^2|c_n|^2} ds = \frac{1}{2\pi} \int_{-\pi}^{\pi}{|z'(s)|^2ds} = 1 \]
+
+\subsubsection{Majoration}
+
+Puisque $\forall n \in \Z$, $n \leqslant n^2$, on a :
+\[ A = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi  \]
+
+Pour un $z \in \mathcal{C}$, il vient que que l'aire du domaine délimité par l'image de $z$ est majorée par $\pi$. \emph{ICI} En particulier, le cercle unité vérifie cette condition d'optimalité. On peut aller plus loin que cela et montrer qu'une telle condition est vérifiée uniquement par le cercle.
+
+%Prouvons que cette majoration est optimale et que le $z$ l'atteignant ne peut qu'être un cercle.
+
+Pour un $z \in \mathcal{C}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, l'idée est de regarder la déviation $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ lorsque $A=\pi$.
+
+Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2} (n^2-n)$, cette majoration donne :
+
+\begin{eqnarray*}
+\Vert w\Vert_{H^1} &=& \frac{1}{2\pi} \int_{-\pi}^{\pi}{ (|w|^2+|w'|^2)ds} \\
+&=& \sum_{n\in \Z\backslash \{0,1\}}{(|c_n|^2+ n^2|nc_n|^2)} \\
+&=& \sum_{n\in \Z\backslash \{0,1\}}{(1+n^2) |c_n|^2 } \\
+&\leqslant& \frac{5}{2} \sum_{n\in \Z\backslash \{0,1\}}{(n^2-n) |c_n|^2 } \\
+&\leqslant& \frac{5}{2} \sum_{n\in \Z}{(n^2-n) |c_n|^2 } \\
+&\leqslant& \frac{5}{2} \left(\sum_{n\in \Z}{n^2|c_n|^2} - \sum_{n\in \Z}{n|c_n|^2 } \right) \\
+&\leqslant& \frac{5}{2} \left(1 - \frac{A}{\pi}\right)
+\end{eqnarray*}
+
+\subsubsection{Résolution}
+
+Pour résoudre le problème $(\mathcal{P})$.
+
+\underline{Existence :}
+
+Soit $z \in \mathcal{C}$ tel que $z(s)=e^{is} = \cos(s)+i\sin(s)$ ($|z'(s)|=|ie^{is}|=1$)
+
+\[ A = \frac{1}{2} \int_{-\pi}^{\pi}{ x(s)y'(s) - x'(s)y(s) \d s } = \frac{1}{2} \int_{-\pi}^{\pi}{ \cos^2(s) + \sin^2(s) \d s } = \frac{1}{2} \int_{-\pi}^{\pi}{ \d s } = \pi \]
+
+\underline{Unicité :}
+
+Si $z \in \mathcal{C}$ tel que $A=\pi$ d'après la majoration, on a $\Vert w\Vert_{H^1}$ donc $\forall s\in [-a,a]$, $z(s) = c_0+c_1e^{is}$. De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
+
+
+\underline{Conclusion} : la solution du problème (\ref{eq:p}) est un cercle de rayon $1$. 
+
+\subsection{Généralisation}
+
+Nous voulons résoudre le problème iso-périmétrique, pour $a\in \R$ :
+\[ (\mathcal{P}) \max_{z \in \mathcal{C}} A(z) \]
+
+Avec $\mathcal{C} = \{ z \in C^0([-a,a], R), z(-a)=z(a), |z'(s)|=1 \}$.
+
+Si on prend $ : s\frac{a z(\frac{\pi s}{a})}{\pi}$, on revient au problème précédent. En effet :
+\begin{eqnarray}
+\mathcal{C} &=& \{ z \in C^0([-a,a], \R), z(-a)=z(a), |z'(s)|=1 \} \\
+&=& 
+\end{eqnarray}
+
+\section{Le problème de Didon}
+\label{sec:didon}
+
+
+Didon était une princesse phénicienne ayant vécu au $\textsc{ix}^\text{ème}$ sciècle avant Jésus-Christ. Selon la légence, elle passe un accord avec un seigneur pour fonder sa nouvelle ville, Carthage. Les terres où elle pourra s'établir seront \og autant qu'il pourrait en tenir dans la peau d'un b\oe{}uf\fg{}. Elle découpe alors la peau en fines lamelles et cela lui permet de dessiner un espace bien plus vaste que ce à quoi on se serait attendu.
+
+Nous allons ici voir quelle était la surface maximale de territoire qu'elle aurait pu obtenir. On se retrouve au problème (\ref{ia}) : étant donné une longeur de peau de bête, quelle est l'aire maximale que l'on peut former ?
+
+
+Le royaume de Carthage se situant au bord de la mer, on va modéliser le problème ainsi : la frontière commence en $x=-l$ sur la côte et s'y termine en $x=l$.
+
+\begin{center}
+
+\begin{tikzpicture}
+\draw[->,color=black] (0,-0.5) -- (0,1);
+\fill[line width=0pt,color=ttttff,fill=ttttff,fill opacity=0.15] (-2,0) -- (2,0) -- (2,-0.5) -- (-2,-0.5) -- cycle;
+\begin{scriptsize}
+\fill [color=blue] (-2,0) circle (.5pt);
+\draw[color=blue] (-2,0) node[anchor=north] {$-l$};
+\fill [color=blue] (2,0) circle (.5pt);
+\draw[color=blue] (2.,0) node[anchor=north] {$+l$};
+\draw[color=black] (0,.8) node[anchor=south east] {$f$};
+\draw[color=ttttff] (0,-.5) node[anchor=south]{Mer};
+\end{scriptsize}
+\draw[smooth,samples=100,domain=-2.0:2.0] plot(\x,{0-((\x)-2)*((\x)+2)/5});
+\draw[->,color=black] (-2,0) -- (2,0);
+\end{tikzpicture}
+
+\end{center}
+
+
+
+Le problème isopérimétrique que nous voulons résoudre est donc le suivant :
+
+\[\max_{y}\int_{-l}^l y(x)\d x\]
+
+Avec $y\in\C^1([-a,a])$ telle que $y(-a)=y(a)=0$, $\int_{-a}^a\sqrt{1+y'(x)^2}\d x=p_0$
+
+
+
+
+
+\begin{thm}
+Soit $y$ une fonction qui vérifie $y(-l)=y(l)=0$ et $\displaystyle\int_{-l}^{l}y(x)\d x=A$. Soit $\eta$ une fonction (ou \emph{varaitaion}) \emph{admissible} :
+\[\eta(-l)=\eta(l)=0\quad \text{et}\quad\int_{-l}^{l}\eta(x)\d x=0\]
+On considère $\phi(t)=J(y+t\eta)$ où $J(y)=\displaystyle\int_{-l}^{l}\sqrt{1+y'(x)^2}\d x$.
+
+Alors $\phi\colon\R\to\R$ est convexe et vérifie $\phi(0)=J(y)$. De plus, $\phi'(0)=0$ pour toute fonction admissible $\eta$ est une CNS pour que $y$ soit solution du problème iso-aire.
+\end{thm}
+
+
+\begin{proof}
+La convexité de $\phi$ est immdiate : il suffit de calculer sa dérivée seconde, qui est positive.
+On se fixe une fonction admissible $\eta$. Supposons que $\phi'(0)=0$. On a alors :
+\begin{align*}
+0=\phi'(0)&=\lim_{t\to 0}\dfrac{\phi(t)-\phi(0)}{t}\\
+			&= \lim_{t\to0}\frac{J(y+t\eta)-J(y)}{t}\\
+			&= \lim_{t\to0}\frac{1}{t}\left(J(y+t(\eta-y+y)-J(y)\right)\\
+			&\leqslant\lim_{t\to0}\frac{1}{t}\left((1-t)J(y)+tJ(\eta+y)-J(y)\right)\quad\text{par convexité de $J$}\\
+			&= \lim_{t\to0}\left(-tJ(y)+tJ(\eta+y)\right)\\
+			&= -J(y)+J(\eta+y)
+\end{align*}
+Ce qui est équivalent à $J(y)\leqslant J(\eta+y)$. Cela étant vrai pour toute fonction $\eta$ admissible (et donc $\int\eta+y=A$), il en résulte que $y$ est solution du problème iso-aire. 
+\end{proof}
+
+
+
+
+\begin{prop}
+Le demi-cercle $y(x)=\sqrt{l^2-x^2}$ (pour $x\in[-l,l]$) est solution du problème iso-aire en pranant $A_0=\frac{\pi}{2}l^2$. Il est donc solution du problème de Didon pour le choix de $p_0=\pi l$.
+\end{prop}
+
+
+
+\begin{proof}
+Soit $\eta$ une variation admissible ($\int_{-l}^l\eta=0$ et $\eta(-l)=\eta(l)=0$). On a alors :
+
+\begin{align*}
+\varphi'(0) &= \int_{-l}^l \frac{y'(x)\eta'(x)}{\sqrt{1+y'(x)^2}}\d x\\
+			&= \left[\frac{-\eta(x) x}{l}\right]_{-l}^l + \int_{-l}^l\frac{\eta(x)}{l}\d x\\
+\intertext{En effet, $\frac{y'}{\sqrt{y'+1}}=-\frac{x}{l}$, il suffit donc de faire une intégration par parties. D'où}
+\varphi'(x)&= 0\quad\text{car }\eta\text{ est une fonction admissible}
+\end{align*}
+
+Ainsi, d'après le théorème précédent, $y$ est solution du problème iso-aire.
+\end{proof}
+
+
+
+
+
+
+\bibliographystyle{unsrt-fr}
+\bibliography{ref}
+\addcontentsline{toc}{section}{Références}
+
+
+
+
+\end{document}
