@@ -333,8 +333,9 @@ On se fixe une fonction admissible $\eta$. Supposons que $\phi'(0)=0$. On a alor
 \begin{align*}
 0=\phi'(0)&=\lim_{t\to 0}\dfrac{\phi(t)-\phi(0)}{t}\\
 			&= \lim_{t\to0}\frac{J(y+t\eta)-J(y)}{t}\\
-			&= \lim_{t\to0}\frac{1}{t}\left(J(y+t(\eta-y+y)-J(y)\right)\\
-			&\leqslant\lim_{t\to0}\frac{1}{t}\left((1-t)J(y)+tJ(\eta+y)-J(y)\right)\quad\text{par convexité de $J$}\\
+			&= \lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}J(y+t(\eta-y+y))-J(y)\right)\\
+			&= \lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}J((1-t)y+t(\eta+y))-J(y)\right)\\
+			&\leqslant\lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}(1-t)J(y)+tJ(\eta+y)-J(y)\right)\quad\text{par convexité de $J$}\\
 			&= \lim_{t\to0}\left(-tJ(y)+tJ(\eta+y)\right)\\
 			&= -J(y)+J(\eta+y)
 \end{align*}
