@@ -41,7 +41,7 @@ def m(f):
 	return np.sum(np.sqrt((f[1:]+f[:-1])**2 + h**2))
 
 def aire(f):
-	return h * (np.sum(f) + (f[0]+f[-1])/2)
+	return h * (np.sum(f[1:-1]) + (f[0]+f[-1])/2)
 
 
 
