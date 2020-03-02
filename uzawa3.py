@@ -84,6 +84,10 @@ def h_uza(f):
 
 def L(f, lam):
 	return f.long() + lam*(f.aire() - a0)
+def L2(f, lam):
+	fc = fonction(n)
+	fc.init_vals(f)
+	return fc.long() + lam*(fc.aire() - a0)
 
 def gradL(f, lam):
 	x = f.vals
@@ -131,19 +135,20 @@ def uzawa(f0,lam,rho=0.01):
 	crt = 1+eps
 	k = 0
 
-	while (crt >= eps and k<kmax):
+	while (crt >= eps and k<5):
 
-		# rhos = np.linspace(-1,1,200)
+		# rhos = np.linspace(-.1,.1,200)
 		# vals = np.zeros_like(rhos)
 		# for i in range(len(rhos)):
-		# 	vals[i] = L(x.vals - rhos[i] * gradL(x,lam), lam)
+			# vals[i] = L2(x.vals - rhos[i] * gradL(x,lam), lam)
 
-		# plt.plot(rhos, vals)
+		# plt.plot(rhos, vals, label=str(k))
 		# crt = eps / 2
 
 
 		x_tmp = grad_pas_fixe(x,lam)
-		# x_tmp.proj()
+		print(x_tmp.vals)
+		x_tmp.proj()
 		lam_tmp = lam + rho*h_uza(x)
 
 		crt = np.linalg.norm(x.vals-x_tmp.vals)
@@ -155,6 +160,7 @@ def uzawa(f0,lam,rho=0.01):
 
 		print(k, "Per :", x.long(), "Aire - a0 :", np.abs(x.aire() - a0))
 
+	# plt.legend()
 	# plt.show()
 	return x
 
@@ -178,6 +184,6 @@ lam0 = 1
 sol = uzawa(f0,lam0)
 
 
-plt.plot(x_cercle, y_cercle, 'r.')
-sol.plot()
+# plt.plot(x_cercle, y_cercle, 'r.')
+# sol.plot()
 plt.show()
