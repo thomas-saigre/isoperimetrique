@@ -159,7 +159,7 @@ Le problème isopérimétrique et le problème iso-aire ont les mêmes solutions
 
 
 \begin{proof}
-On se place dans le cas où $D$ est le domaine délimité par le graphe d'une fonction $y$ qui s'annule en $-l$ et en $l$. On a alors $\A(D)=\int y(x)\d x$, et $\p(D)=\int\sqrt{1+y'(x)^2}\d x$ (voir section \ref{sec:didon}). Ces quantités sont notées respectivement $\A(y)$ et $\p(y)$.
+On se place dans le cas où $D$ est le domaine délimité par le graphe d'une fonction $y$ qui s'annule en $-\ell$ et en $\ell$. On a alors $\A(D)=\int y(x)\d x$, et $\p(D)=\int\sqrt{1+y'(x)^2}\d x$ (voir section \ref{sec:didon}). Ces quantités sont notées respectivement $\A(y)$ et $\p(y)$.
 
 Soit $y_A$ une solution de (\ref{ia}), et supposons par l'absurde que $y_A$ n'est pas solution de (\ref{ip}). Il existe alors un domaine $y_p$ tel que \[\A(y_p)>\A(y_A)\quad\text{et}\quad \p(y_p)=\p(y_a)\]
 Par croissance de l'intégrale, les fonctions $\alpha\mapsto\A(\alpha y)$ et $\alpha\mapsto\p(\alpha y)$ sont des fonctions croissantes.
@@ -250,13 +250,13 @@ Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2}
 
 Pour résoudre le problème $(\mathcal{P})$.
 
-\underline{Existence :}
+\underline{Existence} :
 
 Soit $z \in \mathcal{C}$ tel que $z(s)=e^{is} = \cos(s)+i\sin(s)$ ($|z'(s)|=|ie^{is}|=1$)
 
 \[ A = \frac{1}{2} \int_{-\pi}^{\pi}{ x(s)y'(s) - x'(s)y(s) \d s } = \frac{1}{2} \int_{-\pi}^{\pi}{ \cos^2(s) + \sin^2(s) \d s } = \frac{1}{2} \int_{-\pi}^{\pi}{ \d s } = \pi \]
 
-\underline{Unicité :}
+\underline{Unicité} :
 
 Si $z \in \mathcal{C}$ tel que $A=\pi$ d'après la majoration, on a $\Vert w\Vert_{H^1}$ donc $\forall s\in [-a,a]$, $z(s) = c_0+c_1e^{is}$. De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
 
@@ -280,12 +280,12 @@ Si on prend $ : s\frac{a z(\frac{\pi s}{a})}{\pi}$, on revient au problème pré
 \label{sec:didon}
 
 
-Didon était une princesse phénicienne ayant vécu au $\textsc{ix}^\text{ème}$ sciècle avant Jésus-Christ. Selon la légence, elle passe un accord avec un seigneur pour fonder sa nouvelle ville, Carthage. Les terres où elle pourra s'établir seront \og autant qu'il pourrait en tenir dans la peau d'un b\oe{}uf\fg{}. Elle découpe alors la peau en fines lamelles et cela lui permet de dessiner un espace bien plus vaste que ce à quoi on se serait attendu.
+Didon était une princesse phénicienne ayant vécu au $\textsc{ix}^\text{ème}$ sciècle avant Jésus-Christ. Selon la légende, elle passe un accord avec un seigneur pour fonder sa nouvelle ville, Carthage. Les terres où elle pourra s'établir seront \og autant qu'il pourrait en tenir dans la peau d'un b\oe{}uf\fg{}. Elle découpe alors la peau en fines lamelles et cela lui permet de dessiner un espace bien plus vaste que ce à quoi on se serait attendu.
 
-Nous allons ici voir quelle était la surface maximale de territoire qu'elle aurait pu obtenir. On se retrouve au problème (\ref{ia}) : étant donné une longeur de peau de bête, quelle est l'aire maximale que l'on peut former ?
+Nous allons ici voir quelle était la surface maximale de territoire qu'elle aurait pu obtenir. Le problème retrouvé est alors le problème (\ref{ia}) : étant donné une longueur de peau de bête, quelle est l'aire maximale que l'on peut former ?
 
 
-Le royaume de Carthage se situant au bord de la mer, on va modéliser le problème ainsi : la frontière commence en $x=-l$ sur la côte et s'y termine en $x=l$.
+Le royaume de Carthage se situant au bord de la mer, nous allons modéliser le problème ainsi : la frontière commence en $x=-\ell$ sur la côte et s'y termine en $x=\ell$.
 
 \begin{center}
 
@@ -294,9 +294,9 @@ Le royaume de Carthage se situant au bord de la mer, on va modéliser le problè
 \fill[line width=0pt,color=ttttff,fill=ttttff,fill opacity=0.15] (-2,0) -- (2,0) -- (2,-0.5) -- (-2,-0.5) -- cycle;
 \begin{scriptsize}
 \fill [color=blue] (-2,0) circle (.5pt);
-\draw[color=blue] (-2,0) node[anchor=north] {$-l$};
+\draw[color=blue] (-2,0) node[anchor=north] {$-\ell$};
 \fill [color=blue] (2,0) circle (.5pt);
-\draw[color=blue] (2.,0) node[anchor=north] {$+l$};
+\draw[color=blue] (2.,0) node[anchor=north] {$+\ell$};
 \draw[color=black] (0,.8) node[anchor=south east] {$f$};
 \draw[color=ttttff] (0,-.5) node[anchor=south]{Mer};
 \end{scriptsize}
@@ -310,7 +310,7 @@ Le royaume de Carthage se situant au bord de la mer, on va modéliser le problè
 
 Le problème isopérimétrique que nous voulons résoudre est donc le suivant :
 
-\[\max_{y}\int_{-l}^l y(x)\d x\]
+\[\max_{y}\int_{-\ell}^\ell y(x)\d x\]
 
 Avec $y\in\C^1([-a,a])$ telle que $y(-a)=y(a)=0$, $\int_{-a}^a\sqrt{1+y'(x)^2}\d x=p_0$
 
@@ -319,9 +319,9 @@ Avec $y\in\C^1([-a,a])$ telle que $y(-a)=y(a)=0$, $\int_{-a}^a\sqrt{1+y'(x)^2}\d
 
 
 \begin{thm}
-Soit $y$ une fonction qui vérifie $y(-l)=y(l)=0$ et $\displaystyle\int_{-l}^{l}y(x)\d x=A$. Soit $\eta$ une fonction (ou \emph{varaitaion}) \emph{admissible} :
-\[\eta(-l)=\eta(l)=0\quad \text{et}\quad\int_{-l}^{l}\eta(x)\d x=0\]
-On considère $\phi(t)=J(y+t\eta)$ où $J(y)=\displaystyle\int_{-l}^{l}\sqrt{1+y'(x)^2}\d x$.
+Soit $y$ une fonction qui vérifie $y(-\ell)=y(\ell)=0$ et $\displaystyle\int_{-\ell}^{\ell}y(x)\d x=A$. Soit $\eta$ une fonction (ou \emph{varaitaion}) \emph{admissible} :
+\[\eta(-\ell)=\eta(\ell)=0\quad \text{et}\quad\int_{-\ell}^{\ell}\eta(x)\d x=0\]
+On considère $\phi(t)=J(y+t\eta)$ où $J(y)=\displaystyle\int_{-\ell}^{\ell}\sqrt{1+y'(x)^2}\d x$.
 
 Alors $\phi\colon\R\to\R$ est convexe et vérifie $\phi(0)=J(y)$. De plus, $\phi'(0)=0$ pour toute fonction admissible $\eta$ est une CNS pour que $y$ soit solution du problème iso-aire.
 \end{thm}
@@ -346,18 +346,18 @@ Ce qui est équivalent à $J(y)\leqslant J(\eta+y)$. Cela étant vrai pour toute
 
 
 \begin{prop}
-Le demi-cercle $y(x)=\sqrt{l^2-x^2}$ (pour $x\in[-l,l]$) est solution du problème iso-aire en pranant $A_0=\frac{\pi}{2}l^2$. Il est donc solution du problème de Didon pour le choix de $p_0=\pi l$.
+Le demi-cercle $y(x)=\sqrt{\ell^2-x^2}$ (pour $x\in[-\ell,\ell]$) est solution du problème iso-aire en pranant $A_0=\frac{\pi}{2}\ell^2$. Il est donc solution du problème de Didon pour le choix de $p_0=\pi \ell$.
 \end{prop}
 
 
 
 \begin{proof}
-Soit $\eta$ une variation admissible ($\int_{-l}^l\eta=0$ et $\eta(-l)=\eta(l)=0$). On a alors :
+Soit $\eta$ une variation admissible ($\int_{-\ell}^\ell\eta=0$ et $\eta(-\ell)=\eta(\ell)=0$). On a alors :
 
 \begin{align*}
-\varphi'(0) &= \int_{-l}^l \frac{y'(x)\eta'(x)}{\sqrt{1+y'(x)^2}}\d x\\
-			&= \left[\frac{-\eta(x) x}{l}\right]_{-l}^l + \int_{-l}^l\frac{\eta(x)}{l}\d x\\
-\intertext{En effet, $\frac{y'}{\sqrt{y'+1}}=-\frac{x}{l}$, il suffit donc de faire une intégration par parties. D'où}
+\varphi'(0) &= \int_{-\ell}^\ell \frac{y'(x)\eta'(x)}{\sqrt{1+y'(x)^2}}\d x\\
+			&= \left[\frac{-\eta(x) x}{\ell}\right]_{-\ell}^\ell + \int_{-\ell}^\ell\frac{\eta(x)}{\ell}\d x\\
+\intertext{En effet, $\frac{y'}{\sqrt{y'+1}}=-\frac{x}{\ell}$, il suffit donc de faire une intégration par parties. D'où}
 \varphi'(x)&= 0\quad\text{car }\eta\text{ est une fonction admissible}
 \end{align*}
 
