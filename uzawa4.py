@@ -75,7 +75,6 @@ class fonction:
 
 def f_uza(f):
     return f.long()
-#	return -aire(f)
 
 def h_uza(f):
     return f.aire() - a0
@@ -103,64 +102,99 @@ def gradL(f, lam):
     return gradlg + lam * u
 
 
+## Lagrangien augmenté
+
+def L_aug(f, lam, b, c):
+    return f.long() + lam * (h_uza(f) + c) + b/2 * (h_uza(f) + c)**2
+
+def gradL_aug(f, lam, b, c):
+    x = f.vals
+    u = np.ones_like(f.vals)
+
+    gradlg = np.zeros_like(f.vals)
+    gradlg[0] = x[0] / np.sqrt(x[0]**2 + h**2) - (x[1]-x[0]) / np.sqrt((x[1]-x[0])**2 + h**2)
+    for i in range(1,n-2):
+        gradlg[i] = (x[i]-x[i-1]) / np.sqrt((x[i]-x[i-1])**2 + h**2) - (x[i+1]-x[i]) / np.sqrt((x[i+1]-x[i])**2 + h**2)
+    gradlg[-1] = (x[-1]-x[-2]) / np.sqrt((x[-1]+x[-2])**2 + h**2) + x[-1] / np.sqrt(x[-1]**2 + h**2)
+
+
+    return gradlg + (lam + b*(h_uza(f)+c)) * u
+
+
 
 
 ## Algorithme d'Uzawa
 
 
-def uzawa(f0,lam,rho=1):
+def uzawa(f0,lam,rho=0.2):
 
     f = fonction(n)
     f.init_vals(f0.vals)
+
+    f_m1 = fonction(n)
+    f_m1.init_vals(2 * f0.vals)
     
-    f_tmp = fonction(n)
-    f_tmp.init_vals(2 * f0.vals)
 
     crt = 1+eps
     k = 0
     
     aires = []
     per = []
+    lag = []
+
     
+    # Delta_f = f.long() - f_tmp.long()
     
 
     while (crt >= eps and k<kmax):
+    # while (Delta_f >= 0) and (k < kmax):
         
+        f_tmp = fonction(n)
+        f_tmp.init_vals(2 * f_m1.vals)
         pas = rho
         
         cpt_rho = 0
         Delta_L = L(f_tmp, lam) - L(f, lam)
+        # Delta_L = L_aug(f_tmp, lam, b, c) - L_aug(f, lam, b, c)
         
         while (cpt_rho < 1e2) and (Delta_L >= 0):
             pas /= 1.3
             f_tmp.get_vals(f - pas * gradL(f, lam))
             Delta_L = L(f_tmp, lam) - L(f, lam)
+            # f_tmp.get_vals(f - pas * gradL_aug(f, lam, b, c))
+            # Delta_L = L_aug(f_tmp, lam, b, c) - L_aug(f, lam, b, c)
             
             cpt_rho += 1
         if (cpt_rho == 1e2): print("Nombre maximal d'itération atteint")
 
 
         f_tmp.proj()
+        f.get_vals(f_tmp)
         
         lam_tmp = lam + rho*h_uza(f)
         rho /= 1.3
-        
 
-        crt = np.linalg.norm(f.vals-f_tmp.vals)
+
+        # Delta_f = f_tmp.long() - f.long()
+        crt = np.linalg.norm(f.vals-f_m1.vals)
+
         
         k += 1
 
         
 
-        f.get_vals(f_tmp)
+        f_m1.get_vals(f)
+        # f.get_vals(f_tmp)
         lam = lam_tmp
         
         aires.append(f.aire())
         per.append(f.long())
+        lag.append(L(f,lam))
+        # lag.append(L_aug(f,lam,b,c))
 
         print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0))
 
-    return f,aires,per
+    return f,aires,per,lag
 
 
 
@@ -181,6 +215,9 @@ eps = 1e-3
 
 h = 2*l/n
 
+b = 1
+c = 1
+
 # Les vecteurs sont de taille n+1
 
 
@@ -193,22 +230,31 @@ y_cercle = np.sqrt(l**2 - x_cercle**2)
 
 f0 = fonction(n)
 f0.init_vals(y_cercle[1:-1])
+
+print(f0.long(), f0.aire())
+
 # f0.init_cst()
 lam0 = 1
 
-sol,aires,long = uzawa(f0,lam0)
+sol,aires,long,lag = uzawa(f0,lam0)
 
 
-fig, ax = plt.subplots(1,3)
+fig, ax = plt.subplots(2,2)
 
-ax[0].plot(x_cercle, y_cercle, 'r--')
-sol.plot(ax[0])
+ax[0,0].plot(x_cercle, y_cercle, 'r--')
+ax[0,0].set_title("Solution")
+sol.plot(ax[0,0])
 
-ax[1].plot(aires)
-ax[1].set_title("Aires")
-ax[1].plot([0,len(aires)],[a0,a0])
+ax[0,1].plot(aires)
+ax[0,1].set_title("Aires")
+ax[0,1].plot([0,len(aires)],[a0,a0])
 
-ax[2].plot(long)
-ax[2].set_title("Long")
+ax[1,0].plot(long)
+ax[1,0].set_title("Long")
+
+ax[1,1].plot(lag)
+ax[1,1].set_title("Lagrangien")
+
+fig.tight_layout()
 
 plt.show()
