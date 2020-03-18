@@ -12,7 +12,7 @@ import matplotlib.pyplot as plt
 
 
 class fonction:
-    """docstring for fonction"""
+
     def __init__(self, n):
         self.n = n
         self.vals = np.empty(n-1)	# les valeurs au bord sont 0
@@ -28,19 +28,7 @@ class fonction:
     
     def get_vals(self, f):
         self.vals[:] = f.vals
-    
-    # def __add__(self,f):
-    #     assert(self.n == f.n)
-    #     somme = fonction(self.n)
-    #     somme.init_vals(self.vals + f.vals)
-    #     return somme
-    # 
-    # def __sub__(self,f):
-    #     assert(self.n == f.n)
-    #     somme = fonction(self.n)
-    #     somme.init_vals(self.vals - f.vals)
-    #     return somme
-    
+        
     def __sub__(self,vct):
         assert(self.n == 1+len(vct))
         dif = fonction(self.n)
@@ -126,7 +114,7 @@ def gradL_aug(f, lam, b, c):
 ## Algorithme d'Uzawa
 
 
-def uzawa(f0,lam,rho=0.2):
+def uzawa(f0,lam,pas_grad=0.2,pas_uzawa=0.1):
 
     f = fonction(n)
     f.init_vals(f0.vals)
@@ -143,20 +131,16 @@ def uzawa(f0,lam,rho=0.2):
     lag = []
 
     
-    # Delta_f = f.long() - f_tmp.long()
-    
-
     while (crt >= eps and k<kmax):
-    # while (Delta_f >= 0) and (k < kmax):
         
         f_tmp = fonction(n)
-        f_tmp.init_vals(2 * f_m1.vals)
-        pas = rho
         
+        # Recherche du pas pour la variable primale
+
+        pas = pas_grad
         cpt_rho = 0
-        Delta_L = L(f_tmp, lam) - L(f, lam)
-        # Delta_L = L_aug(f_tmp, lam, b, c) - L_aug(f, lam, b, c)
-        
+        Delta_L = 1
+
         while (cpt_rho < 1e2) and (Delta_L >= 0):
             pas /= 1.3
             f_tmp.get_vals(f - pas * gradL(f, lam))
@@ -167,15 +151,29 @@ def uzawa(f0,lam,rho=0.2):
             cpt_rho += 1
         if (cpt_rho == 1e2): print("Nombre maximal d'itération atteint")
 
-
         f_tmp.proj()
-        f.get_vals(f_tmp)
         
-        lam_tmp = lam + rho*h_uza(f)
-        rho /= 1.3
+
+        # Recherche du pas pour la variable duale
+
+        cpt_pas = 0
+        pasM = pas_uzawa
+        Delta_L = -1
+
+        while (cpt_pas < 1.e2) and (Delta_L <= 0):
+            pasM /= 1.2
+            lam_tmp = lam + pasM * h_uza(f_tmp)
+            Delta_L = L(f_tmp,lam_tmp) - L(f_tmp,lam)
+            cpt_pas += 1
+
+        if (cpt_pas == 1e2): print("Nombre maximal atteint")
 
 
-        # Delta_f = f_tmp.long() - f.long()
+
+        
+        f.get_vals(f_tmp)
+        lam_tmp = lam + pasM*h_uza(f)
+
         crt = np.linalg.norm(f.vals-f_m1.vals)
 
         
@@ -192,7 +190,7 @@ def uzawa(f0,lam,rho=0.2):
         lag.append(L(f,lam))
         # lag.append(L_aug(f,lam,b,c))
 
-        print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0))
+        print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0), (cpt_rho, cpt_pas), crt)
 
     return f,aires,per,lag
 
@@ -205,11 +203,12 @@ def uzawa(f0,lam,rho=0.2):
 n  = 1000
 l  = 1
 p0 = np.pi
-a0 = np.pi / 2
+# a0 = np.pi / 2
+a0 = 0.5
 
 
 
-kmax = 10000
+kmax = 1000
 eps = 1e-3
 
 
@@ -230,9 +229,6 @@ y_cercle = np.sqrt(l**2 - x_cercle**2)
 
 f0 = fonction(n)
 f0.init_vals(y_cercle[1:-1])
-
-print(f0.long(), f0.aire())
-
 # f0.init_cst()
 lam0 = 1
 
