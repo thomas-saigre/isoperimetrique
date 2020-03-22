@@ -1,5 +1,49 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from time import time
+import sys
+import getopt
+
+
+
+
+# Gestion des arguments
+
+try:
+    opts,args = getopt.getopt(sys.argv[1:],"a:ho:",["a0","help","output="])
+except getopt.GetoptError as err:
+    print(err)
+    print("usage : {} a0 [-h] [-o=type]".format(sys.argv[0]))
+    sys.exit(2)
+
+output = None
+a0 = np.pi/2
+nom = 'uzawa'
+for o,a in opts:
+
+    if o == "-a":
+        a0 = float(a)
+
+    elif o == "-h":
+        print("Résolution du problème iso-aire avec l'algorithme d'Uzawa")
+        print("usage : {} [-a=a0] [-h] [-o=type]".format(sys.argv[0]))
+        print("    -a=a0 : modifier la valeur de a (défaut pi/2")
+        print("    -h : afficher l'aide")
+        print("    -o=type : Type d'output (aff=afficher dans la console, fil= nom de fichier pour l'export, défaut=None")
+        sys.exit(0)
+
+    elif o == "-o":
+        if a == "aff": output = a
+        else:
+            output = "exp"
+            nom = a
+
+    else:
+        assert False, "Option non valide"
+
+
+
+
 
 
 
@@ -51,13 +95,7 @@ class fonction:
     def plot(self,fen):
         p = np.concatenate(([0],self.vals,[0]))
         x = np.linspace(-l,l,n+1)
-        fen.plot(x,p)
-
-
-
-
-
-
+        fen.plot(x,p,label="Solution calculée")
 
 ## Fonctions de l'algorithme d'Uzawa
 
@@ -66,8 +104,6 @@ def f_uza(f):
 
 def h_uza(f):
     return f.aire() - a0
-
-
 
 
 ## Lagrangien du problème, et gradient
@@ -114,7 +150,7 @@ def gradL_aug(f, lam, b, c):
 ## Algorithme d'Uzawa
 
 
-def uzawa(f0,lam,pas_grad=0.2,pas_uzawa=0.1):
+def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
 
     f = fonction(n)
     f.init_vals(f0.vals)
@@ -149,7 +185,6 @@ def uzawa(f0,lam,pas_grad=0.2,pas_uzawa=0.1):
             # Delta_L = L_aug(f_tmp, lam, b, c) - L_aug(f, lam, b, c)
             
             cpt_rho += 1
-        if (cpt_rho == 1e2): print("Nombre maximal d'itération atteint")
 
         f_tmp.proj()
         
@@ -166,15 +201,13 @@ def uzawa(f0,lam,pas_grad=0.2,pas_uzawa=0.1):
             Delta_L = L(f_tmp,lam_tmp) - L(f_tmp,lam)
             cpt_pas += 1
 
-        if (cpt_pas == 1e2): print("Nombre maximal atteint")
 
 
-
-        
         f.get_vals(f_tmp)
         lam_tmp = lam + pasM*h_uza(f)
 
-        crt = np.linalg.norm(f.vals-f_m1.vals)
+        crt = np.linalg.norm(f.vals-f_m1.vals)+np.linalg.norm(h_uza(f))
+        # crt = np.linalg.norm(f.vals-f_m1.vals) + np.abs(lam-lam_tmp)
 
         
         k += 1
@@ -182,7 +215,6 @@ def uzawa(f0,lam,pas_grad=0.2,pas_uzawa=0.1):
         
 
         f_m1.get_vals(f)
-        # f.get_vals(f_tmp)
         lam = lam_tmp
         
         aires.append(f.aire())
@@ -190,7 +222,7 @@ def uzawa(f0,lam,pas_grad=0.2,pas_uzawa=0.1):
         lag.append(L(f,lam))
         # lag.append(L_aug(f,lam,b,c))
 
-        print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0), (cpt_rho, cpt_pas), crt)
+        # print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0), (cpt_rho, cpt_pas), crt)
 
     return f,aires,per,lag
 
@@ -200,15 +232,15 @@ def uzawa(f0,lam,pas_grad=0.2,pas_uzawa=0.1):
 
 ## Variables globales et constantes
 
-n  = 1000
+
+n  = 60
 l  = 1
 p0 = np.pi
-# a0 = np.pi / 2
-a0 = 0.5
+# a0 = 0.5
 
 
 
-kmax = 1000
+kmax = 2e5
 eps = 1e-3
 
 
@@ -224,6 +256,8 @@ c = 1
 
 ## Exécution
 
+
+
 x_cercle = np.linspace(-l,l,n+1)
 y_cercle = np.sqrt(l**2 - x_cercle**2)
 
@@ -232,25 +266,62 @@ f0.init_vals(y_cercle[1:-1])
 # f0.init_cst()
 lam0 = 1
 
-sol,aires,long,lag = uzawa(f0,lam0)
+t0 = time()
+sol,aires,lg,lag = uzawa(f0,lam0)
+t1 = time()
+
+# Affichage des résultats :
+chn = "pi/2" if a0==np.pi/2 else ''
+print("Problème isoaire, avec a0 = {}".format(a0),chn)
+print("Temps d'exécution : {}".format(t1-t0), "en {} itérations".format(len(aires)))
+print("Aire finale : {}".format(aires[-1]))
+print("Périmètre final : {}".format(lg[-1]))
 
 
-fig, ax = plt.subplots(2,2)
+if output == 'aff':
 
-ax[0,0].plot(x_cercle, y_cercle, 'r--')
-ax[0,0].set_title("Solution")
-sol.plot(ax[0,0])
+    fig, ax = plt.subplots(2,2)
 
-ax[0,1].plot(aires)
-ax[0,1].set_title("Aires")
-ax[0,1].plot([0,len(aires)],[a0,a0])
+    ax[0,0].plot(x_cercle, y_cercle, 'r--')
+    ax[0,0].set_title("Solution")
+    sol.plot(ax[0,0])
 
-ax[1,0].plot(long)
-ax[1,0].set_title("Long")
+    ax[0,1].plot(aires)
+    ax[0,1].set_title("Aires")
+    ax[0,1].plot([0,len(aires)],[a0,a0])
 
-ax[1,1].plot(lag)
-ax[1,1].set_title("Lagrangien")
+    ax[1,0].plot(lg)
+    ax[1,0].set_title("Longueurs")
 
-fig.tight_layout()
+    ax[1,1].plot(lag)
+    ax[1,1].set_title("Lagrangien")
 
-plt.show()
+    fig.tight_layout()
+
+    plt.show()
+
+elif output == "exp":
+
+    figSol = plt.figure()
+    plt.plot(x_cercle, y_cercle, 'r--',label=r"Solution avc $a_0=\pi/2$")
+    plt.title("Solution")
+    sol.plot(plt)
+    plt.legend()
+    figSol.savefig(nom+"_sol.pdf", bbox_inches='tight')
+
+    figAires = plt.figure()
+    plt.plot(aires)
+    plt.title("Aires")
+    plt.plot([0,len(aires)],[a0,a0],label=r"$a_0$")
+    plt.legend()
+    figAires.savefig(nom+"_aires.pdf", bbox_inches='tight')
+
+    figLon = plt.figure()
+    plt.plot(lg)
+    plt.title("Longueurs")
+    figLon.savefig(nom+"_longueurs.pdf", bbox_inches='tight')
+
+    figLag = plt.figure()
+    plt.plot(lag)
+    plt.title("Lagrangien")
+    figLag.savefig(nom+"_lagrangien.pdf", bbox_inches='tight')
