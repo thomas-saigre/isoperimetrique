@@ -6,19 +6,43 @@ import getopt
 
 
 
+## Variables globales et constantes
+
+n  = 60
+l  = 1
+
+
+
+kmax = 2e5
+eps = 1e-3
+
+
+h = 2*l/n
+
+b = 1
+c = 1
+
+# Les vecteurs sont de taille n+1
+
+output = 'aff'
+a0 = np.pi/2
+nom = 'uzawa'
+aug = False
+
+
+
+
 
 # Gestion des arguments
 
 try:
-    opts,args = getopt.getopt(sys.argv[1:],"a:ho:",["a0","help","output="])
+    opts,args = getopt.getopt(sys.argv[1:],"a:ho:ln:",["a0","help","output="])
 except getopt.GetoptError as err:
     print(err)
-    print("usage : {} a0 [-h] [-o=type]".format(sys.argv[0]))
+    print("usage : {} [options]".format(sys.argv[0]))
     sys.exit(2)
 
-output = None
-a0 = np.pi/2
-nom = 'uzawa'
+
 for o,a in opts:
 
     if o == "-a":
@@ -26,17 +50,23 @@ for o,a in opts:
 
     elif o == "-h":
         print("Résolution du problème iso-aire avec l'algorithme d'Uzawa")
-        print("usage : {} [-a=a0] [-h] [-o=type]".format(sys.argv[0]))
-        print("    -a=a0 : modifier la valeur de a (défaut pi/2")
-        print("    -h : afficher l'aide")
-        print("    -o=type : Type d'output (aff=afficher dans la console, fil= nom de fichier pour l'export, défaut=None")
+        print("usage : {} [options]".format(sys.argv[0]))
+        print("-a a0 : modifier la valeur de a (défaut pi/2)")
+        print("-h : afficher l'aide")
+        print("-o nom : Type d'output (défaut affichage dans la console)")
+        print("-l : Utilisation du Lagrangien augmenté (b=c=1) (ne fonctionne pas !)")
+        print("-n : taille du maillage (défaut 60)")
         sys.exit(0)
 
     elif o == "-o":
-        if a == "aff": output = a
-        else:
-            output = "exp"
-            nom = a
+        output = "exp"
+        nom = a
+
+    elif o == "-l":
+        aug = True
+
+    elif o == "-n":
+        n = int(a)
 
     else:
         assert False, "Option non valide"
@@ -179,10 +209,13 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
 
         while (cpt_rho < 1e2) and (Delta_L >= 0):
             pas /= 1.3
-            f_tmp.get_vals(f - pas * gradL(f, lam))
-            Delta_L = L(f_tmp, lam) - L(f, lam)
-            # f_tmp.get_vals(f - pas * gradL_aug(f, lam, b, c))
-            # Delta_L = L_aug(f_tmp, lam, b, c) - L_aug(f, lam, b, c)
+
+            if not aug:
+                f_tmp.get_vals(f - pas * gradL(f, lam))
+                Delta_L = L(f_tmp, lam) - L(f, lam)
+            else:
+                f_tmp.get_vals(f - pas * gradL_aug(f, lam, b, c))
+                Delta_L = L_aug(f_tmp, lam, b, c) - L_aug(f, lam, b, c)
             
             cpt_rho += 1
 
@@ -207,8 +240,6 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
         lam_tmp = lam + pasM*h_uza(f)
 
         crt = np.linalg.norm(f.vals-f_m1.vals)+np.linalg.norm(h_uza(f))
-        # crt = np.linalg.norm(f.vals-f_m1.vals) + np.abs(lam-lam_tmp)
-
         
         k += 1
 
@@ -219,37 +250,14 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
         
         aires.append(f.aire())
         per.append(f.long())
-        lag.append(L(f,lam))
-        # lag.append(L_aug(f,lam,b,c))
+        if not aug: lag.append(L(f,lam))
+        else: lag.append(L_aug(f,lam,b,c))
 
         # print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0), (cpt_rho, cpt_pas), crt)
 
     return f,aires,per,lag
 
 
-
-
-
-## Variables globales et constantes
-
-
-n  = 60
-l  = 1
-p0 = np.pi
-# a0 = 0.5
-
-
-
-kmax = 2e5
-eps = 1e-3
-
-
-h = 2*l/n
-
-b = 1
-c = 1
-
-# Les vecteurs sont de taille n+1
 
 
 
@@ -271,7 +279,7 @@ sol,aires,lg,lag = uzawa(f0,lam0)
 t1 = time()
 
 # Affichage des résultats :
-chn = "pi/2" if a0==np.pi/2 else ''
+chn = "(pi/2)" if a0==np.pi/2 else ''
 print("Problème isoaire, avec a0 = {}".format(a0),chn)
 print("Temps d'exécution : {}".format(t1-t0), "en {} itérations".format(len(aires)))
 print("Aire finale : {}".format(aires[-1]))
