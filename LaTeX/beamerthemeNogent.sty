@@ -1,0 +1,99 @@
+% v1.1.0 Copyright 2018 by Thomas Saigre
+%
+% This file may be distributed and/or modified
+%
+% 1. under the LaTeX Project Public License and/or
+% 2. under the GNU Public License.
+%
+% See the file doc/licenses/LICENSE for more details.
+
+
+\DeclareOptionBeamer{compress}{\beamer@compresstrue}
+% \DeclareOptionBeamer{sub}{\beamer@notsubtrue}
+\ProcessOptionsBeamer
+
+
+
+
+\definecolor{blRTitreColor}{RGB}{155,0,0}
+\setbeamercolor{titreR}{bg=blRTitreColor,fg=white}
+\setbeamercolor{texteR}{bg=blRTitreColor!20,fg=black}
+\newcommand{\blR}[2]{
+	\begin{beamerboxesrounded}[upper=titreR,lower=texteR,shadow=true]{#1}
+	#2
+	\end{beamerboxesrounded}
+}
+
+
+\definecolor{blBTitreColor}{RGB}{0,0,111}
+\setbeamercolor{titreB}{bg=blBTitreColor,fg=white}
+\setbeamercolor{texteB}{bg=blBTitreColor!20,fg=black}
+\newcommand{\blB}[2]{
+	\begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{#1}
+	#2
+	\end{beamerboxesrounded}
+}
+
+\definecolor{blVTitreColor}{RGB}{0,83,0}
+\setbeamercolor{titreV}{bg=blVTitreColor,fg=white}
+\setbeamercolor{texteV}{bg=blVTitreColor!20,fg=black}
+\newcommand{\blV}[2]{
+	\begin{beamerboxesrounded}[upper=titreV,lower=texteV,shadow=true]{#1}
+	#2
+	\end{beamerboxesrounded}
+}
+
+
+\newcommand{\trucajoute}{}
+\newcommand{\ajouterdansheadline}[1]{
+   \global\def\trucajoute{
+      #1\:
+      \global\let\trucajoute\empty}
+}
+
+
+
+\mode<presentation>
+
+\useoutertheme{split}
+\usecolortheme{hippo}
+
+
+\setbeamerfont{block title}{size={}}
+\setbeamercolor{titlelike}{parent=structure}
+
+\defbeamertemplate*{headline}{}{%
+    \begin{beamercolorbox}[ht=1.875ex,dp=0.75ex]{section in head/foot}
+        \insertsectionnavigationhorizontal{\paperwidth}{}{}% %\paperwidth dans le premier pour que ce soit sur toute la page
+    \end{beamercolorbox}%
+
+   % \ifx\beamer@notsubtrue
+    \begin{beamercolorbox}[ht=1.875ex,dp=0.75ex]{subsection in head/foot}
+       \usebeamerfont{subsection in head/foot}
+       \insertsubsectionnavigationhorizontal{\paperwidth}{}{\hskip0pt plus1filll\trucajoute}
+    \end{beamercolorbox}%
+    %\fi
+}
+
+
+\defbeamertemplate*{footline}{infolines theme}
+{%
+  \leavevmode%
+  \hbox{%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{author in head/foot}%
+    \usebeamerfont{author in head/foot}\insertshortauthor\expandafter\ifblank\expandafter{\beamer@shortinstitute}{}{~~(\insertshortinstitute)}
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,center]{title in head/foot}%
+    \usebeamerfont{title in head/foot}\insertshorttitle
+  \end{beamercolorbox}%
+  \begin{beamercolorbox}[wd=.333333\paperwidth,ht=2.25ex,dp=1ex,right]{date in head/foot}%
+    \usebeamerfont{date in head/foot}\insertshortdate{}\hspace*{2em}
+    \insertframenumber{} / \inserttotalframenumber\hspace*{2ex}
+    %\usebeamertemplate{page number in head/foot}\hspace*{2ex} 
+  \end{beamercolorbox}}%
+  \vskip0pt%
+}
+
+
+\mode
+<all>
