@@ -9,8 +9,8 @@
 % \usepackage{listings}
 % \usepackage{graphicx}
 
-
-
+\usepackage{algorithm}
+\usepackage{algorithmic}
 
 
 
@@ -279,6 +279,7 @@ Si on prend $ : s\frac{a z(\frac{\pi s}{a})}{\pi}$, on revient au problème pré
 \section{Le problème de Didon}
 \label{sec:didon}
 
+\subsection{Résolution analytique}
 
 Didon était une princesse phénicienne ayant vécu au $\textsc{ix}^\text{ème}$ sciècle avant Jésus-Christ. Selon la légende, elle passe un accord avec un seigneur pour fonder sa nouvelle ville, Carthage. Les terres où elle pourra s'établir seront \og autant qu'il pourrait en tenir dans la peau d'un b\oe{}uf\fg{}. Elle découpe alors la peau en fines lamelles et cela lui permet de dessiner un espace bien plus vaste que ce à quoi on se serait attendu.
 
@@ -365,9 +366,121 @@ Ainsi, d'après le théorème précédent, $y$ est solution du problème iso-air
 \end{proof}
 
 
+\subsection{Résolution numérique}
 
+\subsubsection{Discrétisation}
 
+Pour résoudre le problème de Didon de manière numérique, nous allons résoudre le problème isoaire, il s'écrit :
+\[ sup_{Aire(f)=a_0} \{ perimetre(f) \} \]
 
+f étant une fonction dérivable sur $[-l, l]$ et $f(-l)=f(l)=0$.
+\newline
+
+Nous discrétisons $[-l, l]$ en $n+1$ intervalles (soit en $n+2$ points) de manière uniforme et on écrit $(x_i)_{i=-1,...,n}$ les points de la discrétisation (avec  $x_{-1}=-l$ et $x_n=l$) et on écrit $h=\frac{2l}{n+1}$ le pas de la discrétisation.
+
+La fonction $f$ est discrétisée en $n+2$ points $\tilde{f}_i = f(x_i)$ avec $i=-1,...,n$. Nous savons que $\tilde{f}_{-1} = \tilde{f}_n = 0$, les inconnues du problème sont les autres composantes. Donc, nous pouvons simplifier le problème en ne prennant comme vecteur $\tilde{f} = (\tilde{f}(x_i))_{i=0,...,n-1}$ (soit un vecteur de dimension $n$).
+
+Pour plus de comodité, nous écrirons la vecteur $\tilde{f}$ en $f$.
+\newline
+
+Nous voulons avoir une fonction d'aire approximée et une longueur de la courbe approximée de la fonction à partir du vecteur $f$.
+
+Pour avoir une approximation de l'aire, on utilise la méthode des trapèzes :
+\begin{eqnarray*}
+A(f) &=& h (\frac{f_{-1}+f_n}{2} + \sum_{i=0}^{n}{f_i}) \\
+&=& h \sum_{i=0}^{n-1}{f_i}
+\end{eqnarray*}
+
+Pour avoir une approximation de la longueur, nous sommons la longueur entre chaques points consécutifs :
+\begin{eqnarray*}
+lg(f) &=& \sum_{i=-1}^{n}{\sqrt{(f_{i+1}-f_i)^2+(x_{i+1}-x_i)^2}}\\
+&=& \sqrt{f_0^2+h^2} + \sum_{i=-1}^{n}{\sqrt{(f_{i+1}-f_i)^2+h^2}} + \sqrt{f_{n-1}^2+h^2} 
+\end{eqnarray*}
+
+\underline{Remarque :} En discrétisant la formule $lg(f) = \int_{x=-l}^{l}{\sqrt{x^2+f(x)^2}}$, nous retombons sur cette formule.
+\newline
+
+Nous avons alors le Lagrangien :
+\begin{eqnarray*}
+L : \mathbb{R}^n \times \mathbb{R} &\rightarrow & \mathbb{R} \\
+f, \lambda &\rightarrow & lg(f) + \lambda (A(f)-a_0)
+\end{eqnarray*}
+
+Calcul du gradient de $L$ par rapport à $f$ :
+\begin{eqnarray*}
+Grad\_L(f, \lambda) = Grad_lg(f) + \lambda h u
+\end{eqnarray*}
+
+Avec :
+\begin{eqnarray*}
+Grad\_ lg(f)_i &=& \frac{f_i-f_{i-1}}{\sqrt{(f_i-f_{i-1})^2+h^2}} - \frac{f_{i+1}-f_i}{\sqrt{(f_{i+1}-f_i)^2+h^2}} \\
+Grad\_ lg(f)_0 &=& \frac{f_0}{\sqrt{f_0^2+h^2}} - \frac{f_{1}-f_0}{\sqrt{(f_{1}-f_0)^2+h^2}} \\
+Grad\_ lg(f)_{n-1} &=& \frac{f_{n-1}-f_{n-2}}{\sqrt{(f_{n-1}-f_{n-2})^2+h^2}} + \frac{f_{n-1}}{\sqrt{f_{n-1}^2+h^2}} \\
+u &=& (\begin{matrix} 1 && ... && 1 \end{matrix})^T
+\end{eqnarray*}
+
+\subsubsection{Les algorithmes}
+
+Nous utilisons l'algorithme d'Uzawa projeté. Mais pour mettre à jour la variable primale ($f$), nous ne résolvons pas $min L(f_k,\lambda_k)$ mais on s'assure que $L(f_{k+1},\lambda_k) < L(f_k,\lambda_k)$ avec $f_{k+1} = f_k - \rho_i Grad(f_k,\lambda_k)$ (algorithme 2). De même pour la variable duale ($\lambda$), on s'assure que $\lambda_{k+1} > \lambda_k$ avec $\lambda_{k+1} = \lambda_k + \sigma_k (A(f)-a_0)$ (algorithme 3).
+
+\begin{algorithm}
+\caption{Résout le problème de Didon par Uzawa}
+
+\begin{algorithmic}
+	\REQUIRE $f \in \mathbb{R}^n$ et $\lambda \in \mathbb{R}$
+	\STATE $f_0 \leftarrow f$, $\lambda_0 \leftarrow \lambda$
+	\WHILE {condition d'arrêt}
+		\STATE $\rho_{k+1} \leftarrow \text{recherche\_rho($f_k$, $\lambda_k$)}$
+		\STATE $f_{k+1} \leftarrow f_k - \rho_{k+1} Grad(f,\lambda)$
+		\STATE projeter $f_{k+1}$ sur $(\mathbb{R}^+)^n$
+		\STATE $\sigma_{k+1} \leftarrow \text{recherche\_sigma($f_{k+1}$, $\lambda_k$)}$
+		\STATE $\lambda_{k+1} \leftarrow \lambda_k + \sigma_{k+1} (A(f_{k})-a_0)$
+		\STATE $k \leftarrow k+1$
+	\ENDWHILE
+	\RETURN f
+\end{algorithmic}
+
+\end{algorithm}
+
+La condition d'arrêt utlisée est $||f_{k+1}-f_k||_2 + |\lambda_{k+1}-\lambda_k| > precision$ et $k < k_{max}$ avec $kmax$ le maximum de boucles.
+
+\begin{algorithm}
+\caption{Renvoie le pas pseudo-optimal pour la variable primale}
+
+\begin{algorithmic}
+	\REQUIRE $f \in \mathbb{R}^n$ et $\lambda \in \mathbb{R}$ 
+	\ENSURE $L(fbis,\lambda) < L(f,\lambda)$ avec $fbis = f - \rho_i Grad(f,\lambda)$
+	\STATE $fbis_0 \leftarrow f$
+	\STATE $\rho_0 = 1$ (valeur arbitraire)
+	\WHILE {$L(fbis_{i},\lambda) > L(fbis_{i-1},\lambda)$}
+		\STATE $\rho_{i+1} \leftarrow \rho_i / 1.2$
+		\STATE $fbis_{i+1} \leftarrow fbis_i - \rho_{i+1} Grad(f,\lambda)$
+		\STATE $i \leftarrow i+1$
+	\ENDWHILE
+	\RETURN $\rho_i$
+\end{algorithmic}
+
+\end{algorithm}
+
+\begin{algorithm}
+\caption{Renvoie le pas pseudo-optimal pour la variable duale}
+
+\begin{algorithmic}
+	\REQUIRE $f \in \mathbb{R}^n$ et $\lambda \in \mathbb{R}$ 
+	\ENSURE $\lambda bis > \lambda$ avec $\lambda bis = \lambda + \sigma (A(f)-a_0)$
+	\STATE $\lambda bis_0 = \lambda$
+	\STATE $\sigma_0 \leftarrow 1$ (valeur arbitraire)
+	\WHILE {$\lambda bis_i < \lambda bis_{i-1}$}
+		\STATE $\sigma_{i+1} \leftarrow \sigma_i / 1.3$
+		\STATE $\lambda bis_{i+1} \leftarrow \lambda bis_i + \sigma_{i+1} (A(f)-a_0)$
+		\STATE $i \leftarrow i+1$
+	\ENDWHILE
+	\RETURN $\sigma_i$
+\end{algorithmic}
+
+\end{algorithm}
+
+Le choix de $1.2$ et $1.3$ pour la mise à jour des pas $\rho$ et $\sigma$ pour avoir une décroissance (l'assurance d'avoir un convergence) mais pas trop rapide (sinon la solution aurait converger trop rapidement).
 
 \bibliographystyle{unsrt-fr}
 \bibliography{ref}
