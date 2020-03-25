@@ -372,7 +372,7 @@ Ainsi, d'après le théorème précédent, $y$ est solution du problème iso-air
 \subsubsection{Discrétisation}
 
 Pour résoudre le problème de Didon de manière numérique, nous allons résoudre le problème isoaire, il s'écrit :
-\[ sup_{Aire(f)=a_0} \{ perimetre(f) \} \]
+\[ sup_{\A(f)=a_0} \{ \p(f) \} \]
 
 f étant une fonction dérivable sur $[-\ell, \ell]$ et $f(-\ell)=f(\ell)=0$.
 \newline
@@ -430,12 +430,12 @@ Nous utilisons l'algorithme d'Uzawa projeté. Mais pour mettre à jour la variab
 \label{algo:didon}
 
 \begin{algorithmic}
-	\REQUIRE $f \in \mathbb{R}^n$ et $\lambda \in \mathbb{R}$
+	\REQUIRE $f \in \R^n$ et $\lambda \in \R$
 	\STATE $f_0 \leftarrow f$, $\lambda_0 \leftarrow \lambda$
 	\WHILE {condition d'arrêt}
 		\STATE $\rho_{k+1} \leftarrow \text{recherche\_rho($f_k$, $\lambda_k$)}$
 		\STATE $f_{k+1} \leftarrow f_k - \rho_{k+1} Grad(f,\lambda)$
-		\STATE projeter $f_{k+1}$ sur $(\mathbb{R}^+)^n$
+		\STATE projeter $f_{k+1}$ sur $(\R^+)^n$
 		\STATE $\sigma_{k+1} \leftarrow \text{recherche\_sigma($f_{k+1}$, $\lambda_k$)}$
 		\STATE $\lambda_{k+1} \leftarrow \lambda_k + \sigma_{k+1} (A(f_{k})-a_0)$
 		\STATE $k \leftarrow k+1$
@@ -452,7 +452,7 @@ La condition d'arrêt utlisée est $\Vert f_{k+1}-f_k\Vert_2 + |\lambda_{k+1}-\l
 \label{algo:primale}
 
 \begin{algorithmic}
-	\REQUIRE $f \in \mathbb{R}^n$ et $\lambda \in \mathbb{R}$ 
+	\REQUIRE $f \in \R^n$ et $\lambda \in \R$ 
 	\ENSURE $L(fbis,\lambda) < L(f,\lambda)$ avec $fbis = f - \rho_i Grad(f,\lambda)$
 	\STATE $fbis_0 \leftarrow f$
 	\STATE $\rho_0 = 1$ (valeur arbitraire)
@@ -471,7 +471,7 @@ La condition d'arrêt utlisée est $\Vert f_{k+1}-f_k\Vert_2 + |\lambda_{k+1}-\l
 \label{algo:duale}
 
 \begin{algorithmic}
-	\REQUIRE $f \in \mathbb{R}^n$ et $\lambda \in \mathbb{R}$ 
+	\REQUIRE $f \in \R^n$ et $\lambda \in \R$ 
 	\ENSURE $\lambda bis > \lambda$ avec $\lambda bis = \lambda + \sigma (A(f)-a_0)$
 	\STATE $\lambda bis_0 = \lambda$
 	\STATE $\sigma_0 \leftarrow 1$ (valeur arbitraire)
