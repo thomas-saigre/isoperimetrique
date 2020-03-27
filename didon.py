@@ -1,4 +1,10 @@
+# Résolution du problème de Didon
+# Thomas Saigre & Romain Vallet
+# M1 CSMI Année 2019-2020
+
+
 import numpy as np
+from numpy.random import random
 import matplotlib.pyplot as plt
 from time import time
 import sys
@@ -36,7 +42,7 @@ aug = False
 # Gestion des arguments
 
 try:
-    opts,args = getopt.getopt(sys.argv[1:],"a:ho:ln:",["a0","help","output="])
+    opts,args = getopt.getopt(sys.argv[1:],"h",["a0=","help","output=","l_aug","n="])
 except getopt.GetoptError as err:
     print(err)
     print("usage : {} [options]".format(sys.argv[0]))
@@ -48,24 +54,24 @@ for o,a in opts:
     if o == "-a":
         a0 = float(a)
 
-    elif o == "-h":
+    elif o == "-h" or o == "--help":
         print("Résolution du problème iso-aire avec l'algorithme d'Uzawa")
         print("usage : {} [options]".format(sys.argv[0]))
-        print("-a a0 : modifier la valeur de a (défaut pi/2)")
-        print("-h : afficher l'aide")
-        print("-o nom : Type d'output (défaut affichage dans la console)")
-        print("-l : Utilisation du Lagrangien augmenté (b=c=1) (ne fonctionne pas !)")
-        print("-n : taille du maillage (défaut 60)")
+        print("\t--a0=VAL\t\tmodifier la valeur de a (défaut pi/2)")
+        print("\t-h | --help\t\tafficher l'aide")
+        print("\t--output=nom\t\tPréfixe des fichiers pdf générés (par défaut, affichage dans la console)")
+        print("\t--l_aug\t\t\tUtilisation du Lagrangien augmenté (b=c=1)")
+        print("\t--n=VAL\t\t\ttaille du maillage (défaut 60)")
         sys.exit(0)
 
-    elif o == "-o":
+    elif o == "--output=":
         output = "exp"
         nom = a
 
-    elif o == "-l":
+    elif o == "--l_aug":
         aug = True
 
-    elif o == "-n":
+    elif o == "--n=":
         n = int(a)
 
     else:
@@ -95,7 +101,7 @@ class fonction:
         self.vals = np.random.random(self.n-1)
 
     def init_cst(self, c=1):
-        self.vals = c * np.ones_like(self.vals);
+        self.vals = c * np.ones_like(self.vals)
 
     def init_vals(self, tab):
         self.vals = np.copy(tab)
@@ -270,8 +276,8 @@ x_cercle = np.linspace(-l,l,n+1)
 y_cercle = np.sqrt(l**2 - x_cercle**2)
 
 f0 = fonction(n)
-f0.init_vals(y_cercle[1:-1])
-# f0.init_cst()
+# f0.init_vals(y_cercle[1:-1])
+f0.init_cst(a0/(2*l))
 lam0 = 1
 
 t0 = time()
@@ -290,13 +296,13 @@ if output == 'aff':
 
     fig, ax = plt.subplots(2,2)
 
-    ax[0,0].plot(x_cercle, y_cercle, 'r--')
+    ax[0,0].plot(x_cercle, y_cercle, 'r--',label=r"Solution avc $a_0=\pi/2$")
     ax[0,0].set_title("Solution")
     sol.plot(ax[0,0])
 
     ax[0,1].plot(aires)
     ax[0,1].set_title("Aires")
-    ax[0,1].plot([0,len(aires)],[a0,a0])
+    ax[0,1].plot([0,len(aires)],[a0,a0],label=r"$a_0$")
 
     ax[1,0].plot(lg)
     ax[1,0].set_title("Longueurs")
@@ -305,7 +311,7 @@ if output == 'aff':
     ax[1,1].set_title("Lagrangien")
 
     fig.tight_layout()
-
+    plt.legend()
     plt.show()
 
 elif output == "exp":
