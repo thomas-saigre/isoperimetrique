@@ -41,6 +41,7 @@
 \newcommand{\IA}{\textsf{IA}}
 \newcommand{\IP}{\textsf{IP}}
 \renewcommand{\Im}{\mathrm{Im}}
+\renewcommand{\ss}{\vspace*{\baselineskip}}
 
 
 
@@ -127,7 +128,7 @@
 \newpage
 
 \begin{abstract}
-Résumé
+Nous étudions ici le problème isopérimétrique, c'est-à-dire que l'on cherche à maximiser l'aire d'un domaine pour un périmètre donné. Une étude analytique de ce problème sera menée dans un premier temps. Ensuite, nous verrons une implémentation d'un cas particulier de problème isopérimétrique, le problème de Didon, en utilisant une méthode d'Uzawa.
 \end{abstract}
 
 
@@ -138,22 +139,24 @@ Résumé
 \section{Definition du problème isopérimétrique}
 
 \begin{defi}
-Un \emph{problème isopérimetrique} est un problème d'optimisation qui vise a trouver un domaine de $\R^2$ (plus d'autre conditions) qui maximise l'aire pour un périmètre constant :
+Un \emph{problème isopérimétrique} est un problème d'optimisation qui vise à trouver un domaine de $\R^2$ (plus d'autre conditions) qui maximise l'aire pour un périmètre constant :
 \[\max_{D \in \C} \A(D) \label{ia}\tag{\IA}\]
-Avec $\mathcal{C} = \{ D \subset\R^2, \p(D) = p_0 \}$ avec $p_0\in \R_+$ une constante et $C \in R^2$. ???
+Avec $\mathcal{C} = \{ D \subset\R^2, \p(D) = p_0 \}$ avec $p_0\in \R_+$ une constante.
 
 
 \end{defi}
 
 \begin{defi}
-Un \emph{problème iso-aire} est un problème d'optimisation qui vise a trouver un domaine de $\R^2$ (plus d'autre conditions) qui minimise le périmètre pour une aire constante :
+Un \emph{problème iso-aire} est un problème d'optimisation qui vise à trouver un domaine de $\R^2$ (plus d'autre conditions) qui minimise le périmètre pour une aire constante :
 \[\min_{D \in \C} \p(D) \label{ip}\tag{\IP}\]
-
-Avec $\mathcal{C} = \{ D \in C, Aire(D)=c \}$ avec $c \in R$ une constante et $C \in R^2$. ???
+Avec $\mathcal{C} = \{ D \in C, \A(D)=c \}$ avec $c \in R$ une constante.
 \end{defi}
 
 
-Ces deux problèmes sont équivalents. Plus précisément :
+Par \og plus d'autres conditions \fg{}, on entend un restriction de $\R^2$, voir ci-après pour un exemple, avec le problème de Didon.
+
+\ss
+Les deux problèmes \ref{ip} et \ref{ia} sont équivalents. Plus précisément :
 
 \begin{thm}[\cite{tapia09}]
 Le problème isopérimétrique et le problème iso-aire ont les mêmes solutions pour des choix compatibles de $p_0$ et $A_0$.
@@ -172,6 +175,10 @@ Le sens réciproque se montre de la même manière.
 \end{proof}
 
 
+
+
+
+
 \section{Maximisation d'une surface à périmètre constant}
 
 \subsection{Énoncé du problème}
@@ -180,33 +187,34 @@ Nous voulons résoudre le problème iso-périmétrique :
 \[\max_{z \in \mathcal{C}} \A(z) \label{eq:p}\tag{$\P$}\]
 
 
-Avec $\mathcal{C} = \{ z \in C^0([-\pi,\pi], R), z(-\pi)=z(\pi), |z'(s)|=1 \}$.
+Avec $\mathcal{C} = \{ z \in C^0([-\pi,\pi], \R), z(-\pi)=z(\pi), |z'(s)|=1 \}$.
 
-Et $A(z) = \frac{1}{2} \int_{-\pi}^{\pi}{xdy-ydx}$.
+Et $A(z) = \frac{1}{2} \int_{-\pi}^{\pi}{x\d y-y\d x}$.
 
 
-Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow R$ respectivement les parties réelle et imaginiare de $z$.
+Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respectivement les parties réelle et imaginiare de $z$.
+
+
 
 \subsection[Résolution du problème]{Résolution du problème \cite{fuglede86}}
 
 
+\subsubsection{Théorie de Fourier}
 
-\subsubsection{Théorie de Fourrier}
-
-On utlise la théorie de Fourrier ; Puisque $z$ est continue sur $[-a,a]$ et que $z(a)=z(-a)$, on a :
+On utlise la théorie de Fourier. Puisque $z$ est continue sur $[-\pi,\pi]$ et que $z(\pi)=z(-\pi)$, on a :
 
 \[ z(s) = \sum_{n \in \Z}{c_n e^{ins}} \]
 
-Avec $c_n = \frac{1}{2\pi} \int_{-\pi}^{\pi}{z(s)e^{-ins}ds}$.
+Avec $c_n = \frac{1}{2\pi} \int_{-\pi}^{\pi}{z(s)e^{-ins}\d s}$.
 
 \subsubsection{Calcul}
 
 D'une part :
 \begin{eqnarray*}
-\frac{1}{2} \Im \int_{-\pi}^{\pi}{\bar{z}(s) z'(s) \d s} &=& \frac{1}{2} \Im \int_{-\pi}^{\pi}{ \sum_{n\in \Z}{\bar{c_n} e^{-ins}} \sum_{m\in \Z}{imc_n e^{ims}} \d s}\d s\\
-&=& \frac{1}{2} \Im \sum_{n,m\in \Z}{ im c_m \bar{c_n} \int_{-\pi}^{\pi}{e^{ims}e^{-ins}} } \\
-&=& \frac{1}{2} \Im \sum_{n,m\in \Z}{ im c_m \bar{c_n} 2\pi \delta_{n,m} } \\
-&=& \pi \Im( i\sum_{n\in \Z}{ n c_n \bar{c_n}}) \\
+\frac{1}{2} \Im \int_{-\pi}^{\pi}{\overline{z}(s) z'(s) \d s} &=& \frac{1}{2} \Im \int_{-\pi}^{\pi}{ \sum_{n\in \Z}{\overline{c_n} e^{-ins}} \sum_{m\in \Z}{imc_n e^{ims}} \d s}\d s\\
+&=& \frac{1}{2} \Im \sum_{n,m\in \Z}{ im c_m \overline{c_n} \int_{-\pi}^{\pi}{e^{ims}e^{-ins}} } \\
+&=& \frac{1}{2} \Im \sum_{n,m\in \Z}{ im c_m \overline{c_n} 2\pi \delta_{n,m} } \\
+&=& \pi \Im\left( i\sum_{n\in \Z}{ n c_n \overline{c_n}}\right) \\
 &=& \pi \sum_{n\in \Z}{ n |c_n|^2}
 \end{eqnarray*}
 
@@ -260,7 +268,7 @@ Soit $z \in \mathcal{C}$ tel que $z(s)=e^{is} = \cos(s)+i\sin(s)$ ($|z'(s)|=|ie^
 
 \underline{Unicité} :
 
-Si $z \in \mathcal{C}$ tel que $A=\pi$ d'après la majoration, on a $\Vert w\Vert_{H^1}$ donc $\forall s\in [-a,a]$, $z(s) = c_0+c_1e^{is}$. De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
+Si $z \in \mathcal{C}$ tel que $A=\pi$ d'après la majoration, on a $\Vert w\Vert_{H^1}$ donc $\forall s\in [-\pi,\pi]$, $z(s) = c_0+c_1e^{is}$. De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
 
 
 \underline{Conclusion} : la solution du problème (\ref{eq:p}) est un cercle de rayon $1$. 
@@ -321,14 +329,14 @@ Le problème isopérimétrique que nous voulons résoudre est donc le suivant :
 
 \[\max_{y}\int_{-\ell}^\ell y(x)\d x\]
 
-Avec $y\in\C^1([-a,a])$ telle que $y(-a)=y(a)=0$, $\int_{-a}^a\sqrt{1+y'(x)^2}\d x=p_0$
+Avec $y\in\C^1([-\ell,\ell])$ telle que $y(-\ell)=y(\ell)=0$, $\int_{-\ell}^\ell\sqrt{1+y'(x)^2}\d x=p_0$
 
 
 
 
 
 \begin{thm}
-Soit $y$ une fonction qui vérifie $y(-\ell)=y(\ell)=0$ et $\displaystyle\int_{-\ell}^{\ell}y(x)\d x=A$. Soit $\eta$ une fonction (ou \emph{varaitaion}) \emph{admissible} :
+Soit $y$ une fonction qui vérifie $y(-\ell)=y(\ell)=0$ et $\displaystyle\int_{-\ell}^{\ell}y(x)\d x=A$. Soit $\eta$ une fonction (ou \emph{variation}) \emph{admissible} :
 \[\eta(-\ell)=\eta(\ell)=0\quad \text{et}\quad\int_{-\ell}^{\ell}\eta(x)\d x=0\]
 On considère $\phi(t)=J(y+t\eta)$ où $J(y)=\displaystyle\int_{-\ell}^{\ell}\sqrt{1+y'(x)^2}\d x$.
 
@@ -387,15 +395,15 @@ Ainsi, d'après le théorème précédent, $y$ est solution du problème iso-air
 Pour résoudre le problème de Didon de manière numérique, nous allons résoudre le problème isoaire, il s'écrit :
 \[ \sup_{\A(f)=a_0} \{ \p(f) \} \]
 
-La fonction $f$ étant une dérivable sur $[-\ell, \ell]$ et $f(-\ell)=f(\ell)=0$.
+La fonction $f$ étant une fonction dérivable sur $[-\ell, \ell]$ et $f(-\ell)=f(\ell)=0$.
 
 Nous discrétisons $[-\ell, \ell]$ en $n+1$ intervalles (soit en $n+2$ points) de manière uniforme et on écrit $(x_i)_{i=-1,...,n}$ les points de la discrétisation (avec  $x_{-1}=-\ell$ et $x_n=\ell$) et on écrit $h=\frac{2l}{n+1}$ le pas de la discrétisation.
 
 La fonction $f$ est discrétisée en $n+2$ points $\tilde{f}_i = f(x_i)$ avec $i=-1,...,n$. Nous savons que $\tilde{f}_{-1} = \tilde{f}_n = 0$, les inconnues du problème sont les autres composantes. Donc, nous pouvons simplifier le problème en ne prenant comme vecteur $\tilde{f} = (\tilde{f}(x_i))_{i=0,...,n-1}$ (soit un vecteur de dimension $n$).
 
-Pour plus de comodité, nous écrirons la vecteur $\tilde{f}$ en $f$.
+Pour plus de comodité, nous écrirons le vecteur $\tilde{f}$ en $f$.
 
-\vspace*{\baselineskip}
+\ss
 
 Nous voulons avoir une fonction d'aire approximée et une longueur de la courbe approximée de la fonction à partir du vecteur $f$. Dans la suite, on note $A$ l'aire du domaine sous la courbe $f$ et $lg$ sa longueur (c'est-à-dire le périmètre du domaine, sans compter l'axe des abscisses).
 
@@ -405,7 +413,7 @@ A(f) &\approx& h \left(\frac{f_{-1}+f_n}{2} + \sum_{i=0}^{n-1}{f_i}\right) \\
 &=& h \sum_{i=0}^{n-1}{f_i}
 \end{eqnarray*}
 
-Pour avoir une approximation de la longueur, nous sommons la longueur entre chaques points consécutifs :
+Pour avoir une approximation de la longueur, nous sommons les longueurs entre chaque point consécutif :
 \begin{eqnarray*}
 lg(f) &=& \sum_{i=-1}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+{(x_{i+1}-x_i)}^2}}\\
 &=& \sqrt{f_0^2+h^2} + \sum_{i=0}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+h^2}} + \sqrt{f_{n-1}^2+h^2} 
@@ -588,7 +596,7 @@ Nous avons implémenté l'algorithme \ref{algo:didon} en Python. Pour le faire, 
 
 \vspace*{\baselineskip}
 
-On a montré dans précédemment (cf proposition \ref{prop:didon}) qu'en prenant $a_0=\frac{\pi}{2}$ (et $\ell=1$), la solution du problème est le demi-cercle d'équation $y=\sqrt{1-x^2}$. On peut donc comparer le résultats obtenu avec la solution réelle. La courbe obtenue est représentée en figure \ref{fig:tst_sol}. Pour l'exécution, nous avons pris $n=60$, et le programme a mis 35 secondes à s'exécuter. On voit que le résulats obtenu est assez proche de la solution exacte (la différence en norme 2 vaut environ 0.3).
+On a montré précédemment (cf proposition \ref{prop:didon}) qu'en prenant $a_0=\frac{\pi}{2}$ (et $\ell=1$), la solution du problème est le demi-cercle d'équation $y=\sqrt{1-x^2}$. On peut donc comparer le résultats obtenu avec la solution réelle. La courbe obtenue est représentée en figure \ref{fig:tst_sol}. Pour l'exécution, nous avons pris $n=60$, et le programme a mis 35 secondes à s'exécuter. On voit que le résulats obtenu est assez proche de la solution exacte (la différence en norme 2 vaut environ 0.3).
 
 \begin{figure}
 	\centering
@@ -611,12 +619,12 @@ On a montré dans précédemment (cf proposition \ref{prop:didon}) qu'en prenant
 	\caption{Résultats avec $a_0=\frac{\pi}{2}$}
 \end{figure}
 
-On a représenté en figures \ref{fig:tst_air}, l'évolution de l'aire de la solution calculée au cours des différentes boucles de l'algorithme. L'évolution de la longueur et du Lagrangien ont aussi été tracées. On peut ainsi visualiser le comportement de l'algorithme : si on est en dessous on va avoir tendence à remonter et inversement. Les boucles des algorithmes \ref{algo:primale} et \ref{algo:duale} permettent d'être sûr d'aller dans le bon sens. Ici, la solution a convergé, c'est-à-dire que l'on a atteint le critère d'arrêt, en 980 itérations de la boucle d'Uzawa. À la fin, on a obtenu un aire valant 1.570357412122347 (très proche de $a_0=\frac{\pi}{2}$), et un périmètre final valant 3.1490304292815354 (on aurait du trouver $\pi$).
+On a représenté en figure \ref{fig:tst_air}, l'évolution de l'aire de la solution calculée au cours des différentes boucles de l'algorithme. L'évolution de la longueur et du Lagrangien ont aussi été tracées. On peut ainsi visualiser le comportement de l'algorithme : si on est en dessous on va avoir tendence à remonter et inversement. Les boucles des algorithmes \ref{algo:primale} et \ref{algo:duale} permettent d'être sûr d'aller dans le bon sens. Ici, la solution a convergé, c'est-à-dire que l'on a atteint le critère d'arrêt, en 980 itérations de la boucle d'Uzawa. À la fin, on a obtenu un aire valant 1.570357412122347 (très proche de $a_0=\frac{\pi}{2}$), et un périmètre final valant 3.1490304292815354 (on aurait dû trouver $\pi$).
 
 
 On peut ensuite regarder à quoi ressemblerait la courbe obtenue en prenant une valeur de $a_0$ différente de $\frac{\pi}{2}$. Regardons dans un premier temps en prenant $a_0=1$. Cette fois, l'algorithme converge en 287 itéraions (en 5.6 secondes), et on trouve un périmètre final valant 2.625. La solution est tracée en figure \ref{fig:1}.
 
-De même, la solution obtenue avec $a_0=3$ est tracée en figure \ref{fig:3}. Cette fois-ci, l'algorithme a mis 2\,768 itérations avant de se stopper, et le résulats du périmètre final est 4.622. De manière générale, pour $a_0\geqslant\frac{\pi}{2}$, le nombre d'itéraions est beaucoup plus élevé. Par exemple, en prenant $a_0=4$, l'algorithme a atteint le nombre maximal d'itérations valant $2\cdot10^{5}$ avant de converger. Toutefois, il est possible d'atteindre un résulat en changeant un peu l'algorithme, comme nous allons le voir en section suivante.
+De même, la solution obtenue avec $a_0=3$ est tracée en figure \ref{fig:3}. Cette fois-ci, l'algorithme a mis 2\,768 itérations avant de se stopper, et le résulats du périmètre final est 4.622. De manière générale, pour $a_0\geqslant\frac{\pi}{2}$, le nombre d'itéraions est beaucoup plus élevé. Par exemple, en prenant $a_0=4$, l'algorithme a atteint le nombre maximal d'itérations valant $2\cdot10^{5}$ avant de converger.
 
 
 
@@ -647,7 +655,9 @@ Nous allons dans un premier temps nous intéresser au Lagrangien augmenté \cite
 L_b(f,\lambda)&=& lg(f) + \lambda\left(A(f)-a_0 + c\right) + \frac{b}{2}\left(A(f)-a_0+c\right)^2
 \end{eqnarray*}
 
-L'algorithme de résolution reste le même que précédemment, la seule différence est la mise à jour du multiplicateur $\lambda$ : au lieu de rechercher le pas de sorte qu'on ait bien une remontée comme ci-dessus, on applique simplement la formule $\lambda^{n+1} = \lambda^n+b(A(f_k)-a_0)$, où $f_k$ est la solution du problème sans contrainte.
+L'algorithme de résolution reste le même que précédemment, la seule différence est la mise à jour du multiplicateur $\lambda$ : au lieu de rechercher le pas de sorte qu'on ait bien une remontée comme ci-dessus, on applique simplement la formule $\lambda^{n+1} = \lambda^n+b(A(f_k)-a_0)$, où $f_k$ est la solution du problème sans contrainte. La méthode que nous avons essayé d'implémenter n'a pas fonctionné pour le moment.
+
+On peut aussi imaginer d'autre méthodes pour obtenir une solution à ce problème, comme par exemple une méthode de pénalisation.
 
 
 \bibliographystyle{unsrt-fr}
