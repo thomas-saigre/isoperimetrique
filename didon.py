@@ -4,7 +4,6 @@
 
 
 import numpy as np
-from numpy.random import random
 import matplotlib.pyplot as plt
 from time import time
 import sys
@@ -95,9 +94,6 @@ class fonction:
     def __init__(self, n):
         self.n = n
         self.vals = np.empty(n)	# les valeurs au bord sont 0
-
-    def init_random(self):
-        self.vals = np.random.random(self.n)
 
     def init_cst(self, c=1):
         self.vals = c * np.ones_like(self.vals)
@@ -264,7 +260,7 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
         if not aug: lag.append(L(f,lam))
         else: lag.append(L_aug(f,lam,b,c))
 
-        # print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0), (cpt_rho, cpt_pas), crt)
+        print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0), (cpt_rho, cpt_pas), crt)
 
     return f,aires,per,lag
 
