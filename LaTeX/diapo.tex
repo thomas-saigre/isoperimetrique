@@ -8,7 +8,7 @@
 \usepackage{amsfonts}
 \usepackage{amssymb}
 \usepackage{pgf,tikz}
-
+\usepackage[ruled,french]{algorithm2e}
 \DeclareFontShape{T1}{cmss}{m}{sc}{<->ssub*cmss/m/n}{}
 
 \author[Thomas S. \& Romain V.]{Thomas Saigre \& Romain Vallet}
@@ -66,6 +66,12 @@
 	\normalfont
 }
 
+\newcommand\defi[2]{%
+	\begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Définition : #1}
+		\it #2
+	\end{beamerboxesrounded}
+	\normalfont
+}
 
 \begin{document}
 
@@ -82,15 +88,6 @@
 % \frametitre
 
 
-
-\begin{frame}{Problème isopérimétrique}
-
-\end{frame}
-
-
-
-
-
 % Table de matières
 \begin{frame}{Table des matières}
 \tableofcontents[hideallsubsections]
@@ -101,23 +98,43 @@
 
 \section{Définition du problème isopérimétrique}
 
+\begin{frame}{Problème isopérimétrique}
 
+\begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Definition}
+		Un \emph{problème isopérimétrique} est un problème d'optimisation qui vise à trouver un domaine de $\R^2$ (plus d'autre conditions) qui maximise l'aire pour un périmètre constant :
+        \[\max_{D \in \C} \A(D) \label{ia}\tag{\IA}\]
+        Avec $\mathcal{C} = \{ D \subset\R^2, \p(D) = p_0 \}$ avec $p_0\in \R_+$ une constante.
+\end{beamerboxesrounded}
 
+\end{frame}
+
+\begin{frame}{Problème iso-aire}
+
+\begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Definition}
+		Un \emph{problème iso-aire} est un problème d'optimisation qui vise à trouver un domaine de $\R^2$ (plus d'autre conditions) qui minimise le périmètre pour une aire constante :
+        \[\min_{D \in \C} \p(D) \label{ip}\tag{\IP}\]
+        Avec $\mathcal{C} = \{ D \in C, \A(D)=c \}$ avec $c \in R$ une constante.
+\end{beamerboxesrounded}
+
+Les problèmes isopérimétrique et iso-aire sont \textbf{équivalents}.
+
+\end{frame}
 
 \section{Maximisation d'un surface à périmètre constant}
-% Ici je pense qu'il n'y a pas besoin de remettre tout les détails, peut être juste mettre le résultat final. Dans le template beamer, il y a une fonction qui permet de faire des blocs
-% \thm{Titre}{énoncé}
-% Tu peux aussi faire des blocs colorés en utilisant
-%		\begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Titre}
-%			Texte
-%		\end{beamerboxesrounded}
-% et changer les couleurs (il y a déjà vert et rouge de définis, il y a juste à modifier le B dans titreB et texteB)
-%
+
 
 
 \begin{frame}{Maximisation d'un surface à périmètre constant}
 
+\begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Théorème}
+		La solution du problème \emph{isopérimétrique} (ou \emph{iso-aire}) sans conditions est un cercle.
+\end{beamerboxesrounded}
 
+Pour prouver le théorème, on utilise la théorie de Fourier.
+
+On pose une fonction $z: [-\pi,\pi] \rightarrow \R^2$ de classe $C^1$ tel que $z(-\pi)=z(\pi)$, s'écrivant : $z = \sum_{n \in \Z}{c_n e_n}$.
+
+Le but est de prouver que $z = c_0 + c_1 e_1$.
 
 \end{frame}
 
@@ -196,14 +213,123 @@
 \subsection{Résolution numérique}
 
 \begin{frame}
-	\frametitle{titre}
+	\frametitle{Discrétisation}
 
-	
+    On discrétise en $n+2$ points $f_i = f(x_i)$ pour $i=-1,...,n$ ($f_{-1}=f_n=0$).
+
+    \begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Problème d'optimisation}
+		Le problème devient un problème d'optimisation en dimension finie :
+		\[\max_{f \in \left(\R^+\right)^n, \A(f)} lg(f)\]
+		Avec :
+		\begin{itemize}
+            \item Aire : $\A(f) = h \sum_{i=0}^n{f_i}$
+            \item Longueur : $lg(f) =  \sqrt{f_0^2+h^2} + \sum_{i=0}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+h^2}} + \sqrt{f_{n-1}^2+h^2} $
+        \end{itemize}
+    \end{beamerboxesrounded}
 
 \end{frame}
 
+\begin{frame}
+    \frametitle{Algorithme d'Uzawa}
+    
+    Nous allons utiliser l'algorithme d'Uzawa projetté :
+    
+    \begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Formule du Lagrangien}
+		Le Lagrangien s'écrit :
+		\begin{eqnarray*}
+            L \colon \R^n \times \R &\rightarrow & \R \\
+            f, \lambda &\rightarrow & lg(f) + \lambda (\A(f)-a_0)
+        \end{eqnarray*}
+    \end{beamerboxesrounded}
+    
+    Mais au lieu de rechercher à chaque boucle $\min_{\rau} L(f_k - \rho \nabla L(f,\lambda))$ nous voulons juste : $L(f_{k+1}) = L(f_k - \rho \nabla L(f,\lambda)) < L(f_k)$.
+    
+    De même, nous ne voulons pas $max_{\sigma} \lambda_k + \sigma (A(f)-a_0)$ mais juste : $\lambda_{k+1} = \lambda_k + \sigma (A(f)-a_0) > \lambda_k$.
+    
+\end{frame}
 
+\begin{frame}
+    \frametitle{Présentation des algorithmes}
+    
+    \begin{algorithm}
+    \caption{Résout le problème de Didon par Uzawa}
+    \label{algo:didon}
 
+        \KwIn{$f \in \R^n$ et $\lambda \in \R$}
+        
+ 	    $f_0 \leftarrow f$
+ 	    
+ 	    $\lambda_0 \leftarrow \lambda$
+ 	    
+        \While {condition d'arrêt}{
+        $\rho_{k+1} \leftarrow \text{recherche\_rho($f_k$, $\lambda_k$)}$
+        
+ 		$f_{k+1} \leftarrow f_k - \rho_{k+1} Grad(f,\lambda)$
+ 		
+ 		projeter $f_{k+1}$ sur $(\R^+)^n$
+ 		
+ 		$\sigma_{k+1} \leftarrow \text{recherche\_sigma($f_{k+1}$, $\lambda_k$)}$
+ 		
+ 		$\lambda_{k+1} \leftarrow \lambda_k + \sigma_{k+1} (A(f_{k})-a_0)$
+ 		
+ 		$k \leftarrow k+1$
+ 	    }
+ 	    \KwOut f
+ 
+    \end{algorithm}
+
+\end{frame}
+
+\begin{frame}
+    \frametitle{Présentation des algorithmes (suites)}
+    
+    \begin{algorithm}
+    \caption{Renvoie le pas pseudo-optimal pour la variable primale}
+    \label{algo:primale}
+
+	    \KwIn{$f \in \R^n$ et $\lambda \in \R$}
+	    
+	    \KwResult{$L(fbis,\lambda) < L(f,\lambda)$ avec $fbis = f - \rho_i \nabla L(f,\lambda)$}
+
+	    $fbis_0 \leftarrow f$
+
+	    $\rho_0 = 1$ (valeur arbitraire)
+
+	    \While{$L(fbis_{i},\lambda) > L(fbis_{i-1},\lambda)$}{
+		    $\rho_{i+1} \leftarrow \rho_i / 1.2$
+
+		    $fbis_{i+1} \leftarrow fbis_i - \rho_{i+1} Grad(f,\lambda)$
+
+		    $i \leftarrow i+1$
+
+	    }
+	    \KwOut{$\rho_i$}
+
+    \end{algorithm}    
+    
+    \begin{algorithm}
+	    \caption{Renvoie le pas pseudo-optimal pour la variable duale}
+	    \label{algo:duale}
+	
+	    \KwIn{$f \in \R^n$ et $\lambda \in \R$}
+	    
+	    \KwResult{$\lambda bis > \lambda$ avec $\lambda bis = \lambda + \sigma (A(f)-a_0)$}
+	    $\lambda bis_0 = \lambda$
+
+	    $\sigma_0 \leftarrow 1$ (valeur arbitraire)
+
+	    \While{$\lambda bis_i < \lambda bis_{i-1}$}{
+		    $\sigma_{i+1} \leftarrow \sigma_i / 1.3$
+
+		    $\lambda bis_{i+1} \leftarrow \lambda bis_i + \sigma_{i+1} (A(f)-a_0)$
+
+		    $i \leftarrow i+1$
+    	}
+	    \KwOut{$\sigma_i$}
+	
+    \end{algorithm}
+    
+\end{frame}
 
 \subsection{Résultats}
 

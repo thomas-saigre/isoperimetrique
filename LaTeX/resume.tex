@@ -203,9 +203,9 @@ Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respect
 
 On utlise la théorie de Fourier. Puisque $z$ est continue sur $[-\pi,\pi]$ et que $z(\pi)=z(-\pi)$, on a :
 
-\[ z(s) = \sum_{n \in \Z}{c_n e^{ins}} \]
+\[ z(s) = \sum_{n \in \Z}{c_n e_n} \]
 
-Avec $c_n = \frac{1}{2\pi} \int_{-\pi}^{\pi}{z(s)e^{-ins}\d s}$.
+Avec $e_n: s \rightarrow e^{ins}$ et $c_n = \frac{1}{2\pi} \int_{-\pi}^{\pi}{z(s)e^{-ins}\d s}$.
 
 \subsubsection{Calcul}
 
@@ -238,11 +238,11 @@ De plus :
 Puisque $\forall n \in \Z$, $n \leqslant n^2$, on a :
 \[ A = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi  \]
 
-Pour un $z \in \mathcal{C}$, il vient que que l'aire du domaine délimité par l'image de $z$ est majorée par $\pi$. En particulier, le cercle unité vérifie cette condition d'optimalité. On peut aller plus loin que cela et montrer qu'une telle condition est vérifiée uniquement par le cercle.
+Pour un $z \in \mathcal{C}$, il vient que l'aire du domaine délimité par l'image de $z$ est majorée par $\pi$. En particulier, le cercle unité vérifie cette condition d'optimalité. On peut aller plus loin et montrer qu'une telle condition est vérifiée uniquement par le cercle.
 
 %Prouvons que cette majoration est optimale et que le $z$ l'atteignant ne peut qu'être un cercle.
 
-Pour un $z \in \mathcal{C}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, l'idée est de regarder la déviation $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ lorsque $A=\pi$.
+Pour un $z \in \mathcal{C}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, Nous voulons prouver que $z = c_0 + c_1 e_1$ soit un cercle. L'idée est de regarder la déviation $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ lorsque $A=\pi$.
 
 Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2} (n^2-n)$, cette majoration donne :
 
@@ -258,7 +258,7 @@ Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2}
 
 \subsubsection{Résolution}
 
-Pour résoudre le problème (\ref{eq:p}).
+Résolutiondu problème (\ref{eq:p}) :
 
 \underline{Existence} :
 
@@ -266,31 +266,17 @@ Soit $z \in \mathcal{C}$ tel que $z(s)=e^{is} = \cos(s)+i\sin(s)$ ($|z'(s)|=|ie^
 
 \[ A = \frac{1}{2} \int_{-\pi}^{\pi}{ x(s)y'(s) - x'(s)y(s) \d s } = \frac{1}{2} \int_{-\pi}^{\pi}{ \cos^2(s) + \sin^2(s) \d s } = \frac{1}{2} \int_{-\pi}^{\pi}{ \d s } = \pi \]
 
+Il existe une solution au problème.
+
 \underline{Unicité} :
 
-Si $z \in \mathcal{C}$ tel que $A=\pi$ d'après la majoration, on a $\Vert w\Vert_{H^1}$ donc $\forall s\in [-\pi,\pi]$, $z(s) = c_0+c_1e^{is}$. De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
+Si $z \in \mathcal{C}$ tel que $A=\pi$ d'après la majoration prédédente, on a $\Vert w\Vert_{H^1}=0$ donc $\forall s\in [-\pi,\pi]$, $z(s) = c_0+c_1e^{is}$.
 
+Donc les solutions du problème sont de la forme $z(s) = c_0+c_1e^{is}$.
+
+De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
 
 \underline{Conclusion} : la solution du problème (\ref{eq:p}) est un cercle de rayon $1$. 
-
-\subsection{Généralisation}
-
-Nous voulons résoudre le problème iso-périmétrique, pour $a\in \R$ :
-\[ (\mathcal{P}) \max_{z \in \mathcal{C}} A(z) \]
-
-Avec $\mathcal{C} = \{ z \in C^0([-a,a], R), z(-a)=z(a), |z'(s)|=1 \}$.
-
-Si on prend $ : s\frac{a z(\frac{\pi s}{a})}{\pi}$, on revient au problème précédent. En effet :
-\begin{eqnarray}
-\mathcal{C} &=& \{ z \in C^0([-a,a], \R), z(-a)=z(a), |z'(s)|=1 \} \\
-&=& 
-\end{eqnarray}
-
-
-
-
-
-
 
 \section{Le problème de Didon}
 \label{sec:didon}
@@ -392,10 +378,14 @@ Ainsi, d'après le théorème précédent, $y$ est solution du problème iso-air
 
 \subsubsection{Discrétisation}
 
-Pour résoudre le problème de Didon de manière numérique, nous allons résoudre le problème isoaire, il s'écrit :
+Pour résoudre le problème de Didon de manière numérique, nous allons résoudre le problème isoaire (\IP), il se réécrit :
 \[ \sup_{\A(f)=a_0} \{ \p(f) \} \]
 
+Nous prendrons $l = \pi$.
+
 La fonction $f$ étant une fonction dérivable sur $[-\ell, \ell]$ et $f(-\ell)=f(\ell)=0$.
+
+Avec $\A(f) = \int_{-\pi}^{\pi}{f(x)}dx$ et $\p(f) = \int_{-\pi}^{\pi}{\sqrt{1+f'(x)}dx}$
 
 Nous discrétisons $[-\ell, \ell]$ en $n+1$ intervalles (soit en $n+2$ points) de manière uniforme et on écrit $(x_i)_{i=-1,...,n}$ les points de la discrétisation (avec  $x_{-1}=-\ell$ et $x_n=\ell$) et on écrit $h=\frac{2l}{n+1}$ le pas de la discrétisation.
 
@@ -405,13 +395,17 @@ Pour plus de comodité, nous écrirons le vecteur $\tilde{f}$ en $f$.
 
 \ss
 
-Nous voulons avoir une fonction d'aire approximée et une longueur de la courbe approximée de la fonction à partir du vecteur $f$. Dans la suite, on note $A$ l'aire du domaine sous la courbe $f$ et $lg$ sa longueur (c'est-à-dire le périmètre du domaine, sans compter l'axe des abscisses).
+Nous voulons avoir une fonction d'aire approximée et une longueur de la courbe approximée de la fonction à partir du vecteur $f$. Dans la suite, on note $A$ l'aire approximée du domaine sous la courbe $f$ et $lg$ sa longueur approximée (c'est-à-dire le périmètre du domaine, sans compter l'axe des abscisses).
 
 Pour avoir une approximation de l'aire, on utilise la méthode des trapèzes :
 \begin{eqnarray*}
-A(f) &\approx& h \left(\frac{f_{-1}+f_n}{2} + \sum_{i=0}^{n-1}{f_i}\right) \\
+A(f) &=& h \left(\frac{f_{-1}+f_n}{2} + \sum_{i=0}^{n-1}{f_i}\right) \\
 &=& h \sum_{i=0}^{n-1}{f_i}
 \end{eqnarray*}
+
+\begin{rem}
+Pour des raisons de différentiabilité, nous avons pris l'aire signée. Nous devons donc garantir la positivité de la fonction et donc la positivité du vecteur $f$.
+\end{rem}
 
 Pour avoir une approximation de la longueur, nous sommons les longueurs entre chaque point consécutif :
 \begin{eqnarray*}
@@ -420,7 +414,7 @@ lg(f) &=& \sum_{i=-1}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+{(x_{i+1}-x_
 \end{eqnarray*}
 
 \begin{rem}
-En discrétisant la formule $lg(f) = \int_{x=-\ell}^{\ell}{\sqrt{x^2+f(x)^2}}$, nous retombons sur cette formule.
+En discrétisant la formule $\int_{x=-\ell}^{\ell}{\sqrt{x^2+f(x)^2}}$ par la formule des rectangles , nous retombons sur cette formule.
 \end{rem}
 
 Nous avons alors le Lagrangien :
@@ -444,77 +438,37 @@ u &=& (\begin{matrix} 1 && ... && 1 \end{matrix})^T
 
 \subsubsection{Les algorithmes}
 
-Nous utilisons l'algorithme d'Uzawa projeté. Mais pour mettre à jour la variable primale ($f$), nous ne résolvons pas $\min L(f_k,\lambda_k)$ mais on s'assure que $L(f_{k+1},\lambda_k) < L(f_k,\lambda_k)$ avec $f_{k+1} = f_k - \rho_i \nabla_L(f_k,\lambda_k)$ (algorithme \ref{algo:primale}). De même pour la variable duale ($\lambda$), on s'assure que $\lambda_{k+1} > \lambda_k$ avec $\lambda_{k+1} = \lambda_k + \sigma_k (A(f)-a_0)$ (algorithme \ref{algo:duale}).
-
-% \begin{algorithm}
-% \caption{Résout le problème de Didon par Uzawa}
-% \label{algo:didon}
-
-% \begin{algorithmic}
-% 	\REQUIRE $f \in \R^n$ et $\lambda \in \R$
-% 	\STATE $f_0 \leftarrow f$, $\lambda_0 \leftarrow \lambda$
-% 	\WHILE {condition d'arrêt}
-% 		\STATE $\rho_{k+1} \leftarrow \text{recherche\_rho($f_k$, $\lambda_k$)}$
-% 		\STATE $f_{k+1} \leftarrow f_k - \rho_{k+1} Grad(f,\lambda)$
-% 		\STATE projeter $f_{k+1}$ sur $(\R^+)^n$
-% 		\STATE $\sigma_{k+1} \leftarrow \text{recherche\_sigma($f_{k+1}$, $\lambda_k$)}$
-% 		\STATE $\lambda_{k+1} \leftarrow \lambda_k + \sigma_{k+1} (A(f_{k})-a_0)$
-% 		\STATE $k \leftarrow k+1$
-% 	\ENDWHILE
-% 	\RETURN f
-% \end{algorithmic}
-
-% \end{algorithm}
-
+Nous utilisons l'algorithme d'Uzawa projeté. Mais pour mettre à jour la variable primale ($f$), nous ne résolvons pas $\min L(f_k,\lambda_k)$ mais on s'assure que $L(f_{k+1},\lambda_k) < L(f_k,\lambda_k)$ avec $f_{k+1} = f_k - \rho_{k+1} \nabla_L(f_k,\lambda_k)$ (algorithme \ref{algo:primale}). De même pour la variable duale ($\lambda$), on s'assure que $\lambda_{k+1} > \lambda_k$ avec $\lambda_{k+1} = \lambda_k + \sigma_{k+1} (A(f)-a_0)$ (algorithme \ref{algo:duale}).
 
 \begin{algorithm}
-	\caption{Renvoie le pas pseudo-optimal pour la variable primale}
-	\label{algo:didon}
-	
-		\KwIn{$f \in \R^n$ et $\lambda \in \R$}
-		$f_0 \leftarrow f$, $\lambda_0 \leftarrow \lambda$
+\caption{Résout le problème de Didon par Uzawa}
+\label{algo:didon}
 
-		\While{\text{Condition d'arrêt}}{
-			$\rho_{k+1} \leftarrow \text{recherche\_rho($f_k$, $\lambda_k$)}$
-
-			$f_{k+1} \leftarrow f_k - \rho_{k+1} \nabla L(f,\lambda)$
-
-			Projeter $f_{k+1}$ sur $(\R^+)^n$
-
-			$\sigma_{k+1} \leftarrow \text{recherche\_sigma($f_{k+1}$, $\lambda_k$)}$
-
-			$\lambda_{k+1} \leftarrow \lambda_k + \sigma_{k+1} (A(f_{k})-a_0)$
-
-			$k \leftarrow k+1$
-		}
-		\KwOut{$f$}
-	
-	\end{algorithm}
-	
-
+    \KwIn{$f \in \R^n$ et $\lambda \in \R$}
+    
+ 	$f_0 \leftarrow f$
+ 	
+ 	$\lambda_0 \leftarrow \lambda$
+ 	
+ 	\While {condition d'arrêt}{
+ 		$\rho_{k+1} \leftarrow \text{recherche\_rho($f_k$, $\lambda_k$)}$
+ 		
+ 		$f_{k+1} \leftarrow f_k - \rho_{k+1} Grad(f,\lambda)$
+ 		
+ 		projeter $f_{k+1}$ sur $(\R^+)^n$
+ 		
+ 		$\sigma_{k+1} \leftarrow \text{recherche\_sigma($f_{k+1}$, $\lambda_k$)}$
+ 		
+ 		$\lambda_{k+1} \leftarrow \lambda_k + \sigma_{k+1} (A(f_{k})-a_0)$
+ 		
+ 		$k \leftarrow k+1$
+ 	}
+ 	\KwOut f
+ 
+\end{algorithm}
 
 
 La condition d'arrêt utlisée est $\Vert f_{k+1}-f_k\Vert_2 + |\lambda_{k+1}-\lambda_k| > precision$ et $k < k_{max}$ avec $k_{max}$ le maximum de boucles.
-
-% \begin{algorithm}
-% \caption{Renvoie le pas pseudo-optimal pour la variable primale}
-% \label{algo:primale}
-
-% \begin{algorithmic}
-% 	\REQUIRE $f \in \R^n$ et $\lambda \in \R$
-% 	\ENSURE $L(fbis,\lambda) < L(f,\lambda)$ avec $fbis = f - \rho_i Grad(f,\lambda)$
-% 	\STATE $fbis_0 \leftarrow f$
-% 	\STATE $\rho_0 = 1$ (valeur arbitraire)
-% 	\WHILE {$L(fbis_{i},\lambda) > L(fbis_{i-1},\lambda)$}
-% 		\STATE $\rho_{i+1} \leftarrow \rho_i / 1.2$
-% 		\STATE $fbis_{i+1} \leftarrow fbis_i - \rho_{i+1} Grad(f,\lambda)$
-% 		\STATE $i \leftarrow i+1$
-% 	\ENDWHILE
-% 	\RETURN $\rho_i$
-% \end{algorithmic}
-
-% \end{algorithm}
-
 
 \begin{algorithm}
 \caption{Renvoie le pas pseudo-optimal pour la variable primale}
@@ -539,31 +493,6 @@ La condition d'arrêt utlisée est $\Vert f_{k+1}-f_k\Vert_2 + |\lambda_{k+1}-\l
 
 \end{algorithm}
 
-
-
-
-
-
-
-% \begin{algorithm}
-% \caption{Renvoie le pas pseudo-optimal pour la variable duale}
-% \label{algo:duale}
-
-% \begin{algorithmic}
-% 	\REQUIRE $f \in \R^n$ et $\lambda \in \R$ 
-% 	\ENSURE $\lambda bis > \lambda$ avec $\lambda bis = \lambda + \sigma (A(f)-a_0)$
-% 	\STATE $\lambda bis_0 = \lambda$
-% 	\STATE $\sigma_0 \leftarrow 1$ (valeur arbitraire)
-% 	\WHILE {$\lambda bis_i < \lambda bis_{i-1}$}
-% 		\STATE $\sigma_{i+1} \leftarrow \sigma_i / 1.3$
-% 		\STATE $\lambda bis_{i+1} \leftarrow \lambda bis_i + \sigma_{i+1} (A(f)-a_0)$
-% 		\STATE $i \leftarrow i+1$
-% 	\ENDWHILE
-% 	\RETURN $\sigma_i$
-% \end{algorithmic}
-
-% \end{algorithm}
-
 \begin{algorithm}
 	\caption{Renvoie le pas pseudo-optimal pour la variable duale}
 	\label{algo:duale}
@@ -583,7 +512,7 @@ La condition d'arrêt utlisée est $\Vert f_{k+1}-f_k\Vert_2 + |\lambda_{k+1}-\l
 	}
 	\KwOut{$\sigma_i$}
 	
-	\end{algorithm}
+\end{algorithm}
 
 Le choix de $1.2$ et $1.3$ pour la mise à jour des pas $\rho$ et $\sigma$ est pour avoir une décroissance (l'assurance d'avoir une convergence) mais pas trop rapide (sinon la solution aurait convergé trop rapidement).
 
