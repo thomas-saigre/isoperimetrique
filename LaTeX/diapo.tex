@@ -9,6 +9,7 @@
 \usepackage{amssymb}
 \usepackage{pgf,tikz}
 \usepackage[ruled,french]{algorithm2e}
+\usepackage{multicol}
 
 \author[Thomas S. \& Romain V.]{Thomas Saigre \& Romain Vallet}
 
@@ -346,14 +347,48 @@ Le but est de prouver que $z = c_0 + c_1 e_1$.
 \subsection{Résultats}
 
 \begin{frame}
-    \frametitle{titre}
+    \frametitle{Résultats}
+
+    Avec $\ell=1$ et $a_0=\frac{\pi}{2}$ : la solution exacte est un demi-cercle.
+
+    \begin{center}
+    \def\echelle{0.3}
+    \only<1>{%
+        \includegraphics[scale=0.5]{../res/test_sol}
+        \flushleft{Résultat obtenu : 3.1490304292815354}
+    }
+    \only<2>{%
+        \flushleft{Évolution au cours des 980 itérations :}
+
+        \includegraphics[scale=\echelle]{../res/test_aires}
+        \includegraphics[scale=\echelle]{../res/test_longueurs}
+        \includegraphics[scale=\echelle]{../res/test_lagrangien}
+    }
+
+    \end{center}
 
     
 
 \end{frame}
 
 
+\begin{frame}
+\frametitle{Résultats (suite)}
 
+\begin{center}
+
+\begin{multicols}{2}
+$a_0=1$
+\includegraphics[scale=0.5]{../res/petit_sol}
+En 287 itérations : 2.625
+
+$a_0=3$
+\includegraphics[scale=0.5]{../res/trois_sol}
+En 2\,768 itérations : 4.622
+\end{multicols}
+\end{center}
+
+\end{frame}
 
 
 \subsection{Autres méthodes de résolution}
