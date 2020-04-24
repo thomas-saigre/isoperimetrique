@@ -24,15 +24,14 @@ eps = 1e-3
 
 h = 2*l/(n+1)
 
-b = 1
-c = 1
+
 
 # Les vecteurs sont de taille n+1
 
 output = 'aff'
 a0 = np.pi/2
 nom = 'uzawa'
-aug = False
+verbose = False
 
 
 
@@ -41,7 +40,7 @@ aug = False
 # Gestion des arguments
 
 try:
-    opts,args = getopt.getopt(sys.argv[1:],"ha:",["a0=","help","output=","l_aug"])
+    opts,args = getopt.getopt(sys.argv[1:],"hva:",["a0=","help","output="])
 except getopt.GetoptError as err:
     print(err)
     print("usage : {} [options]".format(sys.argv[0]))
@@ -56,21 +55,18 @@ for o,a in opts:
     elif o == "-h" or o == "--help":
         print("Résolution du problème iso-aire avec l'algorithme d'Uzawa")
         print("usage : {} [options]".format(sys.argv[0]))
-        print("\t--a0=VAL | -aVal\tmodifier la valeur de a (défaut pi/2)")
+        print("\t--a0=Val | -aVal\tmodifier la valeur de a0 (défaut pi/2)")
         print("\t-h | --help\t\tafficher l'aide")
+        print("\t-v\t\t\tafficher les itérations")
         print("\t--output=nom\t\tPréfixe des fichiers pdf générés (par défaut, affichage dans la console)")
-        print("\t--l_aug\t\t\tUtilisation du Lagrangien augmenté (b=c=1)")
         sys.exit(0)
 
     elif o == "--output":
         output = "exp"
         nom = a
 
-    elif o == "--l_aug":
-        aug = True
-
-    elif o == "--n":
-        n = int(a)
+    elif o == "-v":
+        verbose = True
 
     else:
         assert False, "Option non valide"
@@ -159,23 +155,6 @@ def gradL(f, lam):
     return gradlg + lam * u
 
 
-## Lagrangien augmenté
-
-def L_aug(f, lam, b, c):
-    return f.long() + lam * (h_uza(f) + c) + b/2 * (h_uza(f) + c)**2
-
-def gradL_aug(f, lam, b, c):
-    x = f.vals
-    u = np.ones_like(f.vals)
-
-    gradlg = np.zeros_like(f.vals)
-    gradlg[0] = x[0] / np.sqrt(x[0]**2 + h**2) - (x[1]-x[0]) / np.sqrt((x[1]-x[0])**2 + h**2)
-    for i in range(1,f.n-1):
-        gradlg[i] = (x[i]-x[i-1]) / np.sqrt((x[i]-x[i-1])**2 + h**2) - (x[i+1]-x[i]) / np.sqrt((x[i+1]-x[i])**2 + h**2)
-    gradlg[-1] = (x[-1]-x[-2]) / np.sqrt((x[-1]+x[-2])**2 + h**2) + x[-1] / np.sqrt(x[-1]**2 + h**2)
-
-
-    return gradlg + (lam + b*(h_uza(f)+c)) * u
 
 
 
@@ -215,12 +194,8 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
         while (cpt_rho < 1e2) and (Delta_L >= 0):
             pas /= 1.3
 
-            if not aug:
-                f_tmp.get_vals(f - pas * gradL(f, lam))
-                Delta_L = L(f_tmp, lam) - L(f, lam)
-            else:
-                f_tmp.get_vals(f - pas * gradL_aug(f, lam, b, c))
-                Delta_L = L_aug(f_tmp, lam, b, c) - L_aug(f, lam, b, c)
+            f_tmp.get_vals(f - pas * gradL(f, lam))
+            Delta_L = L(f_tmp, lam) - L(f, lam)
             
             cpt_rho += 1
 
@@ -233,14 +208,12 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
         pasM = pas_uzawa
         Delta_L = -1
 
-        if not aug:
-            while (cpt_pas < 1.e2) and (Delta_L <= 0):
-                pasM /= 1.2
-                lam_tmp = lam + pasM * h_uza(f_tmp)
-                Delta_L = L(f_tmp,lam_tmp) - L(f_tmp,lam)
-                cpt_pas += 1
-        else:
-            lam_tmp = lam + b * h_uza(f)
+        while (cpt_pas < 1.e2) and (Delta_L <= 0):
+            pasM /= 1.2
+            lam_tmp = lam + pasM * h_uza(f_tmp)
+            Delta_L = L(f_tmp,lam_tmp) - L(f_tmp,lam)
+            cpt_pas += 1
+
 
 
         f.get_vals(f_tmp)
@@ -257,10 +230,10 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
         
         aires.append(f.aire())
         per.append(f.long())
-        if not aug: lag.append(L(f,lam))
-        else: lag.append(L_aug(f,lam,b,c))
+        lag.append(L(f,lam))
 
-        print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0), (cpt_rho, cpt_pas), crt)
+        if verbose:
+            print(k, "Per :", f.long(), "\tAire - a0 :", np.abs(f.aire() - a0), (cpt_rho, cpt_pas), "\t", crt)
 
     return f,aires,per,lag
 

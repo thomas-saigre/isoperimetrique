@@ -1,4 +1,4 @@
-# Résolution du problème de Didon
+# Résolution du problème de Didon (avec lagrangien augmenté)
 # Thomas Saigre & Romain Vallet
 # M1 CSMI Année 2019-2020
 
@@ -18,20 +18,63 @@ l  = 1
 
 
 
-kmax = 2e5
+kmax = 3e4
 eps = 1e-3
 
 
 h = 2*l/(n+1)
 
-b = 0.06
-c = 1
+b = 1
 
 # Les vecteurs sont de taille n+1
 output = 'aff'
 a0 = 3
 nom = 'uzawa'
-aug = False
+verbose = False
+
+
+
+
+
+# Gestion des arguments
+
+try:
+    opts,args = getopt.getopt(sys.argv[1:],"hva:b:",["a0=","b=","help","output="])
+except getopt.GetoptError as err:
+    print(err)
+    print("usage : {} [options]".format(sys.argv[0]))
+    sys.exit(2)
+
+
+for o,a in opts:
+
+    if o == "-a" or o == "--a0":
+        a0 = float(a)
+    
+    elif o == "-b" or o == "--b":
+        b = float(a)
+
+    elif o == "-h" or o == "--help":
+        print("Résolution du problème iso-aire avec l'algorithme d'Uzawa")
+        print("usage : {} [options]".format(sys.argv[0]))
+        print("\t--a0=Val | -aVal\tmodifier la valeur de a0 (défaut pi/2)")
+        print("\t--b=Val | -bVal\tmodifier la valeur de b (défaut 1")
+        print("\t-h | --help\t\tafficher l'aide")
+        print("\t-v\t\t\tafficher les itérations")
+        print("\t--output=nom\t\tPréfixe des fichiers pdf générés (par défaut, affichage dans la console)")
+        sys.exit(0)
+
+    elif o == "--output":
+        output = "exp"
+        nom = a
+
+    elif o == "-v":
+        verbose = True
+
+    else:
+        assert False, "Option {} non valide".format(o)
+
+
 
 
 
@@ -89,12 +132,11 @@ def h_uza(f):
 
 ## Lagrangien augmenté
 
-def L_aug(f, lam, b, c):
-    return f.long() + lam * (h_uza(f) + c) + b/2 * (h_uza(f) + c)**2
+def L_aug(f, lam, b):
+    return f.long() + lam * (h_uza(f)) + b/2 * (h_uza(f))**2
 
-def gradL_aug(f, lam, b, c):
+def gradL_aug(f, lam, b):
     x = f.vals
-    u = np.ones_like(f.vals)
 
     gradlg = np.zeros_like(f.vals)
     gradlg[0] = x[0] / np.sqrt(x[0]**2 + h**2) - (x[1]-x[0]) / np.sqrt((x[1]-x[0])**2 + h**2)
@@ -103,7 +145,7 @@ def gradL_aug(f, lam, b, c):
     gradlg[-1] = (x[-1]-x[-2]) / np.sqrt((x[-1]+x[-2])**2 + h**2) + x[-1] / np.sqrt(x[-1]**2 + h**2)
 
 
-    return gradlg + (lam + b*(h_uza(f)+c)) * u
+    return gradlg + (lam + b*(h_uza(f))) * h
 
 
 
@@ -143,22 +185,26 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
         while (cpt_rho < 1e2) and (Delta_L >= 0):
             pas /= 1.3
 
-            f_tmp.get_vals(f - pas * gradL_aug(f, lam, b, c))
-            Delta_L = L_aug(f_tmp, lam, b, c) - L_aug(f, lam, b, c)
+            f_tmp.get_vals(f - pas * gradL_aug(f, lam, b))
+            Delta_L = L_aug(f_tmp, lam, b) - L_aug(f, lam, b)
             
             cpt_rho += 1
 
         f_tmp.proj()
-        
 
         lam_tmp = lam + b * h_uza(f)
 
-        Delta_LA = np.abs(L_aug(f_tmp,lam_tmp,b,c)-L_aug(f_tmp,lam,b,c))
+        nor_lam = np.linalg.norm(lam_tmp-lam)
+
+        # Delta_LA = np.abs(L_aug(f,lam_tmp,b)-L_aug(f_tmp,lam,b))
 
 
         f.get_vals(f_tmp)
 
-        crt = np.linalg.norm(f.vals-f_m1.vals)+np.linalg.norm(h_uza(f))+Delta_LA
+        # crt = np.linalg.norm(f.vals-f_m1.vals) + nor_lam
+        crt = np.abs(Delta_L) + nor_lam
+
+        # crt = np.linalg.norm(f.vals-f_m1.vals)+np.linalg.norm(h_uza(f))+Delta_LA
         
         k += 1
 
@@ -169,9 +215,10 @@ def uzawa(f0,lam,pas_grad=0.1,pas_uzawa=0.1):
         
         aires.append(f.aire())
         per.append(f.long())
-        lag.append(L_aug(f,lam,b,c))
+        lag.append(L_aug(f,lam,b))
 
-        print(k, "Per :", f.long(), "Aire - a0 :", np.abs(f.aire() - a0), crt)
+        if verbose:
+            print(k, "Per :", f.long(), "\tAire - a0 :", np.abs(f.aire() - a0), "\t", crt)
 
     return f,aires,per,lag
 
@@ -205,23 +252,53 @@ print("Aire finale : {}".format(aires[-1]))
 print("Périmètre final : {}".format(lg[-1]))
 
 
-fig, ax = plt.subplots(2,2)
 
-ax[0,0].plot(x_cercle, y_cercle, 'r--',label=r"Solution avc $a_0=\pi/2$")
-ax[0,0].set_title("Solution")
-sol.plot(ax[0,0])
-ax[0,0].legend()
 
-ax[0,1].plot(aires)
-ax[0,1].set_title("Aires")
-ax[0,1].plot([0,len(aires)],[a0,a0],label=r"$a_0$")
-ax[0,1].legend()
+if output == 'aff':
 
-ax[1,0].plot(lg)
-ax[1,0].set_title("Longueurs")
+    fig, ax = plt.subplots(2,2)
 
-ax[1,1].plot(lag)
-ax[1,1].set_title("Lagrangien")
+    ax[0,0].plot(x_cercle, y_cercle, 'r--',label=r"Solution avc $a_0=\pi/2$")
+    ax[0,0].set_title("Solution")
+    sol.plot(ax[0,0])
+    ax[0,0].legend()
 
-fig.tight_layout()
-plt.show()
+    ax[0,1].plot(aires)
+    ax[0,1].set_title("Aires")
+    ax[0,1].plot([0,len(aires)],[a0,a0],label=r"$a_0$")
+    ax[0,1].legend()
+
+    ax[1,0].plot(lg)
+    ax[1,0].set_title("Longueurs")
+
+    ax[1,1].plot(lag)
+    ax[1,1].set_title("Lagrangien")
+
+    fig.tight_layout()
+    plt.show()
+
+elif output == "exp":
+
+    figSol = plt.figure()
+    plt.plot(x_cercle, y_cercle, 'r--',label=r"Solution avc $a_0=\pi/2$")
+    plt.title("Solution")
+    sol.plot(plt)
+    plt.legend()
+    figSol.savefig(nom+"_sol.pdf", bbox_inches='tight')
+
+    figAires = plt.figure()
+    plt.plot(aires)
+    plt.title("Aires")
+    plt.plot([0,len(aires)],[a0,a0],label=r"$a_0$")
+    plt.legend()
+    figAires.savefig(nom+"_aires.pdf", bbox_inches='tight')
+
+    figLon = plt.figure()
+    plt.plot(lg)
+    plt.title("Longueurs")
+    figLon.savefig(nom+"_longueurs.pdf", bbox_inches='tight')
+
+    figLag = plt.figure()
+    plt.plot(lag)
+    plt.title("Lagrangien")
+    figLag.savefig(nom+"_lagrangien.pdf", bbox_inches='tight')
