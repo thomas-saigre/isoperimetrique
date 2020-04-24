@@ -28,7 +28,7 @@ b = 1
 
 # Les vecteurs sont de taille n+1
 output = 'aff'
-a0 = 3
+a0 = np.pi/2
 nom = 'uzawa'
 verbose = False
 

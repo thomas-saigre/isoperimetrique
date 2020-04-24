@@ -101,7 +101,7 @@
 {\LARGE \textsf{\textbf{Résolution du problème isopérimétrique\\}}}
 \rule{\linewidth}{0.5mm}
 
-\vspace{2\baselineskip}
+\vspace*{\stretch{1}}
 
 {\Large Projet d'optimisation}
 
@@ -110,7 +110,7 @@
 {\Large Master 1 -- CSMI \\ \vspace{0.5\baselineskip} Université de Strasbourg}
 % \vspace{\baselineskip}
 
-\vspace{2\baselineskip}
+\vspace*{\stretch{1}}
 
 {\sf \Large Thomas Saigre \& Romain Vallet}
 
@@ -120,12 +120,7 @@
 
 
 
-\vspace*{\stretch{1}}
-
-% \setcounter{tocdepth}{2}
-% \tableofcontents
-
-\vspace*{\stretch{1}}
+\vspace*{\stretch{2}}
 
 
 \newpage
@@ -160,8 +155,8 @@ Par \og plus d'autres conditions \fg{}, on entend une restriction de $\R^2$. Par
 
 Les problèmes deviennent:
 \begin{itemize}
-    \item \emph{problème isopérimétrique} : \[\max_{D \in \C} \A(D) \text{ avec } \C = \{ D \in K, \p(D) = p_0 \} \label{ida}\tag{\IDA}\]
-    \item \emph{problème iso-aire} : \[\min_{D \in \C} \p(D) \text{ avec } \C = \{ D \in K, \A(D)=c \} \label{idp}\tag{\IDP}\]
+    \item \emph{problème isopérimétrique} : \[\max_{D \in \C} \A(D) \qquad\text{ avec } \C = \{ D \in K, \p(D) = p_0 \} \label{ida}\tag{\IDA}\]
+    \item \emph{problème iso-aire} : \[\min_{D \in \C} \p(D) \qquad\text{ avec } \C = \{ D \in K, \A(D)=c \} \label{idp}\tag{\IDP}\]
 \end{itemize}
 
 \ss
@@ -318,10 +313,8 @@ Le terme de droite de \ref{in:s} est appelé \textbf{déficit isopérimétrique}
 
 \begin{coro}
 Le problème d'optimisation :
-\[\max_{D \in \C} \A(D) \]
-Avec $\mathcal{C} = \{ D \text{ un convexe borné à bords $C^1$ de } \R^2, \p(D) = 2\pi \}$
-
-\`A pour solution un cercle.
+\[\max_{D \in \C} \A(D), \]
+avec $\mathcal{C} = \{ D \text{ un convexe borné à bords $C^1$ de } \R^2, \p(D) = 2\pi \}$, a pour solution un cercle.
 \end{coro}
 
 \begin{rem}
@@ -633,10 +626,29 @@ De même, la solution obtenue avec $a_0=3$ est tracée en figure \ref{fig:3}. Ce
 Nous allons dans un premier temps nous intéresser au Lagrangien augmenté \cite{cohen00}. Il s'agit ici de prendre une autre fonction pour le Lagrangien, le \emph{Lagrangien augmenté} :
 
 \begin{eqnarray*}
-L_b(f,\lambda)&=& lg(f) + \lambda\left(A(f)-a_0 + c\right) + \frac{b}{2}\left(A(f)-a_0+c\right)^2
+L_b(f,\lambda)&=& lg(f) + \lambda\left(A(f)-a_0\right) + \frac{b}{2}\left(A(f)-a_0\right)^2
 \end{eqnarray*}
 
-L'algorithme de résolution reste le même que précédemment, la seule différence est la mise à jour du multiplicateur $\lambda$ : au lieu de rechercher le pas de sorte qu'on ait bien une remontée comme ci-dessus, on applique simplement la formule $\lambda^{n+1} = \lambda^n+b(A(f_k)-a_0)$, où $f_k$ est la solution du problème sans contrainte. La méthode que nous avons essayé d'implémenter n'a pas fonctionné pour le moment.
+L'algorithme de résolution reste le même que précédemment, la seule différence est la mise à jour du multiplicateur $\lambda$ : au lieu de rechercher le pas de sorte qu'on ait bien une remontée comme ci-dessus, on applique simplement la formule $\lambda^{n+1} = \lambda^n+b(A(f_k)-a_0)$, où $f_k$ est la solution du problème sans contrainte. La méthode que nous avons essayé d'implémenter comporte quelques défauts mais donne des résultats similaires à ce qu'on avait précédemment, mais obtenus en moins d'itérations.
+Par exemple, en prenant $a_0=4$, la méthode d'Uzawa \og normale \fg{} prenait au moins $2\cdot 10^5$ itérations (on atteignait le nombre maximal d'itération), tandis que le lagrangien augmenté converge en 1\,671 itérations. Le résultat, ainsi que l'évolution du Lagrangien sont donnés en figure \ref{fig:aug}.
+
+
+
+\begin{figure}
+\centering
+\subfigure[Solutions]{%
+	\includegraphics[scale=0.5]{../res/aug4_sol}
+	\label{fig:aug:sol}
+}
+\subfigure[Évolution du lagrangien]{%
+	\includegraphics[scale=0.5]{../res/aug4_lagrangien}
+	\label{fig:aug:lag}
+}
+\caption{Résultats avec le lagrangien augmenté}
+\label{fig:aug}
+\end{figure}
+
+
 
 On peut aussi imaginer d'autre méthodes pour obtenir une solution à ce problème, comme par exemple une méthode de pénalisation.
 
