@@ -40,6 +40,9 @@
 \newcommand{\p}{\mathrm{Per}}
 \newcommand{\IA}{\textsf{IA}}
 \newcommand{\IP}{\textsf{IP}}
+\newcommand{\IDA}{\textsf{IDA}}
+\newcommand{\IDP}{\textsf{IDP}}
+\newcommand{\DI}{\textsf{DI}}
 \renewcommand{\Im}{\mathrm{Im}}
 \renewcommand{\ss}{\vspace*{\baselineskip}}
 
@@ -141,7 +144,7 @@ Nous étudions ici le problème isopérimétrique, c'est-à-dire que l'on cherch
 \begin{defi}
 Un \emph{problème isopérimétrique} est un problème d'optimisation qui vise à trouver un domaine de $\R^2$ (plus d'autres conditions) qui maximise l'aire pour un périmètre constant :
 \[\max_{D \in \C} \A(D) \label{ia}\tag{\IA}\]
-Avec $\mathcal{C} = \{ D \subset\R^2, \p(D) = p_0 \}$ avec $p_0\in \R_+$ une constante.
+Avec $\mathcal{C} = \{ D \text{ un convexe borné de } \R^2, \p(D) = p_0 \}$ avec $p_0\in \R_+$ une constante.
 
 
 \end{defi}
@@ -149,11 +152,17 @@ Avec $\mathcal{C} = \{ D \subset\R^2, \p(D) = p_0 \}$ avec $p_0\in \R_+$ une con
 \begin{defi}
 Un \emph{problème iso-aire} est un problème d'optimisation qui vise à trouver un domaine de $\R^2$ (plus d'autres conditions) qui minimise le périmètre pour une aire constante :
 \[\min_{D \in \C} \p(D) \label{ip}\tag{\IP}\]
-Avec $\mathcal{C} = \{ D \in C, \A(D)=c \}$ avec $c \in R$ une constante.
+Avec $\mathcal{C} = \{ D \text{ un convexe borné de } \R^2, \A(D)=c \}$ avec $c \in \R_+$ une constante.
 \end{defi}
 
 
-Par \og plus d'autres conditions \fg{}, on entend un restriction de $\R^2$, voir ci-après pour un exemple, avec le problème de Didon.
+Par \og plus d'autres conditions \fg{}, on entend une restriction de $\R^2$. Par exemple, avec le problème de Didon (pour plus de détails voir ci-après), nous introduisons la classe : $K = \{ \Omega_f, f \in \C^1([-\ell,\ell],\R^+) \text{ et } f(-\ell) = f(\ell) = 0 \}$ avec $\Omega_f = \{ x, y \in \R^2, -\ell \leq x \leq \ell \text{ et } 0 \leq y \leq f(x) \}$.
+
+Les problèmes deviennent:
+\begin{itemize}
+    \item \emph{problème isopérimétrique} : \[\max_{D \in \C} \A(D) \text{ avec } \C = \{ D \in K, \p(D) = p_0 \} \label{ida}\tag{\IDA}\]
+    \item \emph{problème iso-aire} : \[\min_{D \in \C} \p(D) \text{ avec } \C = \{ D \in K, \A(D)=c \} \label{idp}\tag{\IDP}\]
+\end{itemize}
 
 \ss
 Les deux problèmes \ref{ip} et \ref{ia} sont équivalents. Plus précisément :
@@ -169,7 +178,7 @@ On se place dans le cas où $D$ est le domaine délimité par le graphe d'une fo
 Soit $y_A$ une solution de (\ref{ia}), et supposons par l'absurde que $y_A$ n'est pas solution de (\ref{ip}). Il existe alors un domaine $y_p$ tel que \[\A(y_p)>\A(y_A)\quad\text{et}\quad \p(y_p)=\p(y_a)\]
 Par croissance de l'intégrale, les fonctions $\alpha\mapsto\A(\alpha y)$ et $\alpha\mapsto\p(\alpha y)$ sont des fonctions croissantes.
 
-On choisit $\alpha<1$ tel que $\A(\alpha y_p)=\A(y_A)$. Alors $\p(\alpha y_p)<\p(y_A)$, ce qui est abstude car $y_A$ est solution de (\ref{ia}).
+On choisit $\alpha<1$ tel que $\A(\alpha y_p)=\A(y_A)$. Alors $\p(\alpha y_p)<\p(y_A)$, ce qui est absurde car $y_A$ est solution de (\ref{ia}).
 
 Le sens réciproque se montre de la même manière.
 \end{proof}
@@ -183,27 +192,40 @@ Le sens réciproque se montre de la même manière.
 
 \subsection{Énoncé du problème}
 
-Nous voulons résoudre le problème iso-périmétrique :
-\[\max_{z \in \mathcal{C}} \A(z) \label{eq:p}\tag{$\P$}\]
+Nous voulons résoudre le problème iso-périmétrique \ref{ia} avec $p_0=2\pi$ avec comme contrainte que les domaines considérés soit à bord $\C^1$, ce problème se réécrit :
+\[\max_{z \in \mathcal{E}} \A(z) \label{eq:p}\tag{$\P$}\]
 
 
-Avec $\mathcal{C} = \{ z \in C^0([-\pi,\pi], \R), z(-\pi)=z(\pi), |z'(s)|=1 \}$.
+Avec $\mathcal{E} = \{ z \in C^1([-\pi,\pi], \R), z(-\pi)=z(\pi), |z'(s)|=1 \}$.
 
-Et $A(z) = \frac{1}{2} \int_{-\pi}^{\pi}{x\d y-y\d x}$.
+Et $\A(z) = \frac{1}{2} \Im\left(\int_{-\pi}^{\pi}{\bar z(t) z'(t) dt}\right) = \frac{1}{2} \int_{-\pi}^{\pi}{x\d y-y\d x}$.
 
+%\includegraphics[]{}
 
-Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respectivement les parties réelle et imaginiare de $z$.
+Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respectivement les parties réelles et imaginaires de $z$.
 
+En effet :
+\[ \p(z) = \int_{-\pi}^{\pi}{|z'(t)|dt} = 2\pi = p_0 \label{eq:e}\tag{\textsf{I}}\]
+\[ \A(z) = \A(\Gamma_z) \text{ avec $\Gamma_z$ l'ensemble délimité par le graphe de $z$} \label{eq:f}\tag{\textsf{II}}\]
+\[ \text{Tout convexe borné $D$ à bord $\C^1$ admet une fonction $z \in \C^1([-\pi,\pi])$ tel que $D=\Gamma_z$ } \label{eq:g}\tag{\textsf{III}}\]
 
+On a l'équivalence :
+\begin{eqnarray*}
+\ref{ia} &\Longleftrightarrow& \max_{D \in \C} \A(D) \text{ avec } \C = \{ D \in K, \p(D) = 2\pi \} \\
+&\underset{\ref{eq:g}}{\Longleftrightarrow}& \max_{z \in \mathcal{E}'} \A(\Gamma_z) \text{ avec } \mathcal{E}' = \{ z \in \C^1([-\pi,\pi]), \p(z) = 2\pi \} \\
+&\underset{\ref{eq:e}+\ref{eq:f}}{\Longleftrightarrow}& \max_{z \in \mathcal{E}} \A(z) \text{ avec } \mathcal{E} = \{ z \in \C^1,  z(-\pi)=z(\pi), |z'(s)|=1 \}
+\end{eqnarray*}
 
 \subsection[Résolution du problème]{Résolution du problème \cite{fuglede86}}
 
 
 \subsubsection{Théorie de Fourier}
 
+Soit $z \in \mathcal{E}$
+
 On utlise la théorie de Fourier. Puisque $z$ est continue sur $[-\pi,\pi]$ et que $z(\pi)=z(-\pi)$, on a :
 
-\[ z(s) = \sum_{n \in \Z}{c_n e_n} \]
+\[ z = \sum_{n \in \Z}{c_n e_n} \]
 
 Avec $e_n: s \rightarrow e^{ins}$ et $c_n = \frac{1}{2\pi} \int_{-\pi}^{\pi}{z(s)e^{-ins}\d s}$.
 
@@ -238,11 +260,11 @@ De plus :
 Puisque $\forall n \in \Z$, $n \leqslant n^2$, on a :
 \[ A = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi  \]
 
-Pour un $z \in \mathcal{C}$, il vient que l'aire du domaine délimité par l'image de $z$ est majorée par $\pi$. En particulier, le cercle unité vérifie cette condition d'optimalité. On peut aller plus loin et montrer qu'une telle condition est vérifiée uniquement par le cercle.
+Pour un $z \in \mathcal{E}$, il vient que l'aire du domaine délimité par l'image de $z$ est majorée par $\pi$. En particulier, le cercle unité vérifie cette condition d'optimalité. On peut aller plus loin et montrer qu'une telle condition est vérifiée uniquement par le cercle.
 
 %Prouvons que cette majoration est optimale et que le $z$ l'atteignant ne peut qu'être un cercle.
 
-Pour un $z \in \mathcal{C}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, Nous voulons prouver que $z = c_0 + c_1 e_1$ soit un cercle. L'idée est de regarder la déviation $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ lorsque $A=\pi$.
+Pour un $z \in \mathcal{E}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, Nous voulons prouver que $z = c_0 + c_1 e_1$ soit un cercle. L'idée est de regarder la déviation $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ \footnote{$H^1 = \{ w \in L^2(\R), \exists g \text{ dérivé au sens des distributions} \}$ et $\Vert w \Vert_{H^1} = \Vert w \Vert_{L^2} + \Vert g \Vert_{L^2}$} lorsque $A=\pi$.
 
 Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2} (n^2-n)$, cette majoration donne :
 
@@ -258,11 +280,11 @@ Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2}
 
 \subsubsection{Résolution}
 
-Résolutiondu problème (\ref{eq:p}) :
+Résolution du problème (\ref{eq:p}) :
 
 \underline{Existence} :
 
-Soit $z \in \mathcal{C}$ tel que $z(s)=e^{is} = \cos(s)+i\sin(s)$ ($|z'(s)|=|ie^{is}|=1$)
+Soit $z \in \mathcal{E}$ tel que $z(s)=e^{is} = \cos(s)+i\sin(s)$ ($|z'(s)|=|ie^{is}|=1$)
 
 \[ A = \frac{1}{2} \int_{-\pi}^{\pi}{ x(s)y'(s) - x'(s)y(s) \d s } = \frac{1}{2} \int_{-\pi}^{\pi}{ \cos^2(s) + \sin^2(s) \d s } = \frac{1}{2} \int_{-\pi}^{\pi}{ \d s } = \pi \]
 
@@ -270,13 +292,41 @@ Il existe une solution au problème.
 
 \underline{Unicité} :
 
-Si $z \in \mathcal{C}$ tel que $A=\pi$ d'après la majoration prédédente, on a $\Vert w\Vert_{H^1}=0$ donc $\forall s\in [-\pi,\pi]$, $z(s) = c_0+c_1e^{is}$.
+Si $z \in \mathcal{E}$ tel que $A=\pi$ d'après la majoration prédédente, on a $\Vert w\Vert_{H^1}=0$ donc $\forall s\in [-\pi,\pi]$, $z(s) = c_0+c_1e^{is}$.
 
 Donc les solutions du problème sont de la forme $z(s) = c_0+c_1e^{is}$.
 
 De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
 
-\underline{Conclusion} : la solution du problème (\ref{eq:p}) est un cercle de rayon $1$. 
+\underline{Conclusion} :  
+
+\begin{thm}
+Soit $z \in \mathcal{E} (\subset L^2([-\pi,\pi]))$ tel que $z = \sum_{n \in \Z}{c_n e_n}$ et soit $w = z-  \left(c_0 + c_1 e_1\right) \in L^2([\pi,\pi])$.
+
+D'une part :
+\[ \A(z) \leq \pi \]
+
+D'autre part :
+\[ \Vert w\Vert_{H^1} \leq \frac{5}{2} \left(1 - \frac{A}{\pi}\right) \label{in:s} \tag{\textsf{S}} \]
+
+La solution du problème \ref{eq:p} est atteint pour $A = \pi$ et $z = c_0 + c_1 e_1$. Ici $\Gamma_z$ est un \textbf{cercle}.
+\end{thm}
+
+\begin{rem}
+Le terme de droite de \ref{in:s} est appelé \textbf{déficit isopérimétrique}.
+\end{rem}
+
+\begin{coro}
+Le problème d'optimisation :
+\[\max_{D \in \C} \A(D) \]
+Avec $\mathcal{C} = \{ D \text{ un convexe borné à bords $C^1$ de } \R^2, \p(D) = 2\pi \}$
+
+\`A pour solution un cercle.
+\end{coro}
+
+\begin{rem}
+Le problème peut être généralisé pour $p_0$ quelconque. La solution reste toujours un cercle.
+\end{rem}
 
 \section{Le problème de Didon}
 \label{sec:didon}
@@ -285,7 +335,7 @@ De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
 
 Didon était une princesse phénicienne ayant vécu au $\textsc{ix}^\text{ème}$ siècle avant Jésus-Christ. Selon la légende, elle passe un accord avec un seigneur pour fonder sa nouvelle ville, Carthage. Les terres où elle pourra s'établir seront \og autant qu'il pourrait en tenir dans la peau d'un b\oe{}uf\fg{}. Elle découpe alors la peau en fines lamelles et cela lui permet de dessiner un espace bien plus vaste que ce à quoi on se serait attendu.
 
-Nous allons ici voir quelle était la surface maximale de territoire qu'elle aurait pu obtenir. Le problème retrouvé est alors le problème (\ref{ia}) : étant donné une longueur de peau de bête, quelle est l'aire maximale que l'on peut former ?
+Nous allons ici voir quelle était la surface maximale de territoire qu'elle aurait pu obtenir. Le problème retrouvé est alors le problème (\ref{ida}) : étant donné une longueur de peau de bête, quelle est l'aire maximale que l'on peut former ?
 
 
 Le royaume de Carthage se situant au bord de la mer, nous allons modéliser le problème ainsi : la frontière commence en $x=-\ell$ sur la côte et s'y termine en $x=\ell$.
@@ -378,8 +428,8 @@ Ainsi, d'après le théorème précédent, $y$ est solution du problème iso-air
 
 \subsubsection{Discrétisation}
 
-Pour résoudre le problème de Didon de manière numérique, nous allons résoudre le problème isoaire (\IP), il se réécrit :
-\[ \sup_{\A(f)=a_0} \{ \p(f) \} \]
+Pour résoudre le problème de Didon de manière numérique, nous allons résoudre le problème isoaire \ref{idp}, il se réécrit :
+\[ \sup_{\A(f)=a_0} \{ \p(f) \} \label{di}\tag{\DI} \]
 
 Nous prendrons $l = \pi$.
 
@@ -399,8 +449,9 @@ Nous voulons avoir une fonction d'aire approximée et une longueur de la courbe 
 
 Pour avoir une approximation de l'aire, on utilise la méthode des trapèzes :
 \begin{eqnarray*}
-A(f) &=& h \left(\frac{f_{-1}+f_n}{2} + \sum_{i=0}^{n-1}{f_i}\right) \\
-&=& h \sum_{i=0}^{n-1}{f_i}
+A(f) &=& \int_{-\pi}^{\pi}{f(x)dx} \\
+&\simeq& h \left(\frac{f_{-1}+f_n}{2} + \sum_{i=0}^{n-1}{f_i}\right) \\
+&\simeq& h \sum_{i=0}^{n-1}{f_i}
 \end{eqnarray*}
 
 \begin{rem}
@@ -409,21 +460,22 @@ Pour des raisons de différentiabilité, nous avons pris l'aire signée. Nous de
 
 Pour avoir une approximation de la longueur, nous sommons les longueurs entre chaque point consécutif :
 \begin{eqnarray*}
-lg(f) &=& \sum_{i=-1}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+{(x_{i+1}-x_i)}^2}}\\
-&=& \sqrt{f_0^2+h^2} + \sum_{i=0}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+h^2}} + \sqrt{f_{n-1}^2+h^2} 
+lg(f) &=& \int_{-\pi}^{\pi}{\sqrt{x^2+f'(x)^2} dx} \\
+&\simeq& \sum_{i=-1}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+{(x_{i+1}-x_i)}^2}}\\
+&\simeq& \sqrt{f_0^2+h^2} + \sum_{i=0}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+h^2}} + \sqrt{f_{n-1}^2+h^2} 
 \end{eqnarray*}
 
 \begin{rem}
-En discrétisant la formule $\int_{x=-\ell}^{\ell}{\sqrt{x^2+f(x)^2}}$ par la formule des rectangles , nous retombons sur cette formule.
+En discrétisant l'intégrale $\int_{x=-\ell}^{\ell}{\sqrt{x^2+f(x)^2}}$ par la formule des rectangles , nous retombons sur l'expression ci-dessus.
 \end{rem}
 
-Nous avons alors le Lagrangien :
+Nous introduisons le Lagrangien :
 \begin{eqnarray*}
 L \colon \R^n \times \R &\rightarrow & \R \\
 f, \lambda &\rightarrow & lg(f) + \lambda (A(f)-a_0)
 \end{eqnarray*}
 
-Calcul du gradient de $L$ par rapport à $f$ :
+Nous calculons le gradient de $L$ par rapport à $f$ :
 \begin{eqnarray*}
 \nabla_L(f, \lambda) & = & \nabla_{lg}(f) + \lambda h u
 \end{eqnarray*}
