@@ -394,7 +394,7 @@ On se fixe une fonction admissible $\eta$. Supposons que $\phi'(0)=0$. On a alor
 			&=& \lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}J(y+t(\eta-y+y))-J(y)\right)\\
 			&=& \lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}J((1-t)y+t(\eta+y))-J(y)\right)\\
 			&\leqslant&\lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}(1-t)J(y)+tJ(\eta+y)-J(y)\right)\quad\text{par convexité de $J$}\\
-			&=& \lim_{t\to0}\left(-tJ(y)+tJ(\eta+y)\right)\\
+			&=& \lim_{t\to0}\frac{1}{t}\left(-tJ(y)+tJ(\eta+y)\right)\\
 			&=& -J(y)+J(\eta+y)
 \end{eqnarray*}
 Ce qui est équivalent à $J(y)\leqslant J(\eta+y)$. Cela étant vrai pour toute fonction $\eta$ admissible (et donc $\int\eta+y=A$), il en résulte que $y$ est solution du problème iso-aire. 
@@ -405,7 +405,7 @@ Ce qui est équivalent à $J(y)\leqslant J(\eta+y)$. Cela étant vrai pour toute
 
 \begin{prop}
 \label{prop:didon}
-Le demi-cercle $y(x)=\sqrt{\ell^2-x^2}$ (pour $x\in[-\ell,\ell]$) est solution du problème iso-aire en pranant $A_0=\frac{\pi}{2}\ell^2$. Il est donc solution du problème de Didon pour le choix de $p_0=\pi \ell$.
+Le demi-cercle $y(x)=\sqrt{\ell^2-x^2}$ (pour $x\in[-\ell,\ell]$) est solution du problème iso-aire en prenant $A_0=\frac{\pi}{2}\ell^2$. Il est donc solution du problème de Didon pour le choix de $p_0=\pi \ell$.
 \end{prop}
 
 
@@ -417,7 +417,7 @@ Soit $\eta$ une variation admissible ($\int_{-\ell}^\ell\eta=0$ et $\eta(-\ell)=
 \varphi'(0) &= \int_{-\ell}^\ell \frac{y'(x)\eta'(x)}{\sqrt{1+y'(x)^2}}\d x\\
 			&= \left[\frac{-\eta(x) x}{\ell}\right]_{-\ell}^\ell + \int_{-\ell}^\ell\frac{\eta(x)}{\ell}\d x\\
 \intertext{En effet, $\frac{y'}{\sqrt{y'+1}}=-\frac{x}{\ell}$, il suffit donc de faire une intégration par parties. D'où}
-\varphi'(x)&= 0\quad\text{car }\eta\text{ est une fonction admissible}
+\varphi'(0)&= 0\quad\text{car }\eta\text{ est une fonction admissible}
 \end{align*}
 
 Ainsi, d'après le théorème précédent, $y$ est solution du problème iso-aire.

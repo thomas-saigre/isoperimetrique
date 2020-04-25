@@ -237,15 +237,15 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
         Le demi-cercle $y(x)=\sqrt{\ell^2-x^2}$ est solution du problème iso-aire en prenant $A_0=\frac{\pi}{2}\ell^2$. Il est donc solution du problème de Didon pour le choix de $p_0=\pi\ell$.
     }
 
-    \begin{beamerboxesrounded}[upper=titreV,lower=texteV,shadow=true]{Rappel de cours (dimension infinie)}
-        Un point critique d'un fonction differentiable convexe est un minimum.
+    \begin{beamerboxesrounded}[upper=titreV,lower=texteV,shadow=true]{Rappel de cours}
+        Un point critique d'une fonction differentiable convexe est un minimum.
     \end{beamerboxesrounded}
 
 
 
     \begin{proof}
-    On montre que la fonction $y$ est un point critique de la fonction convexe $J\colon f\mapsto \int_{-\ell}^\ell \sqrt{1+f'(t)}\d t$. 
-    à finir !!
+    On montre que la fonction $y$ est un point critique de la fonction convexe $J\colon f\mapsto \int_{-\ell}^\ell \sqrt{1+f'(t)}\d t$.
+    Pour ce faire, on pose $\phi\colon t\in\R\mapsto J(y+t\eta)$ avec $\eta$ telle que $\eta(-\ell)=\eta(\ell)=0$ et $\int_{-\ell}^\ell \eta=0$, puis on montre que $\phi'(0)=0$.
     \end{proof}
 
 \end{frame}
