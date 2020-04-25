@@ -36,7 +36,7 @@
 %\setbeamertemplate{navigation symbols}{} 
 %\logo{} 
 %\institute{} 
-\date{5 septembre 2020}  %%%% Mettre la date de présentation <----------- !!!!!
+\date{27 avril 2020}
 
 
 
@@ -119,6 +119,8 @@ Nous pouvons rajouter des contraintes sur $\C$.
 \end{beamerboxesrounded}
 
 Nous pouvons rajouter des contraintes sur $\C$.
+
+\vspace{\baselineskip}
 Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équivalents}.
 
 \end{frame}
@@ -130,15 +132,16 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
 
 
 
-\section{Maximisation d'un surface à périmètre constant}
+\section{Maximisation d'une surface à périmètre constant}
 
 
 
-\begin{frame}{Maximisation d'un surface à périmètre constant}
+\begin{frame}{Maximisation d'une surface à périmètre constant}
 
 \begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Théorème}
         La solution du problème \emph{isopérimétrique} (ou \emph{iso-aire}) sans condition est un cercle.
 \end{beamerboxesrounded}
+\vspace{\baselineskip}
 
 Pour prouver le théorème, on utilise la théorie de Fourier.
 
@@ -397,13 +400,28 @@ En 2\,768 itérations : 4.622
 \subsection{Autres méthodes de résolution}
 
 \begin{frame}
-    \frametitle{Autres méthodes de résolution}
+    \frametitle{Autre méthode de résolution : Lagrangien augmenté}
 
+    \only<1>{%
     \begin{itemize}
-        \item Lagrangien augmenté
-        \item Pénalisation
-        \item \dots
+        \item $L_b(f,\lambda)=lg(f) + \lambda\left(A(f)-a_0\right)+\dfrac{b}{2}\left(A(f)-a_0\right)^2$
+        \item Mise à jour du multiplicateur : $\lambda^{n+1}=\lambda^n + b\left(A(f_k)-a_0\right)$
+
+        \begin{center}
+            \includegraphics[scale=0.45]{../res/aug-pi_sol}
+
+            $a_0=\frac{\pi}{2}$
+        \end{center}
     \end{itemize}
+    }
+
+    \only<2>{%
+    $a_0=4$, en 1\,671 itérations (contre au moins $2\times 10^5$ avec le lagrangien \og normal \fg{})
+    \begin{center}
+        \includegraphics[scale=0.4]{../res/aug4_sol}
+        \includegraphics[scale=0.4]{../res/aug4_lagrangien}
+    \end{center}
+    }
 
 \end{frame}
 

@@ -197,6 +197,17 @@ Et $\A(z) = \frac{1}{2} \Im\left(\int_{-\pi}^{\pi}{\bar z(t) z'(t) dt}\right) = 
 
 %\includegraphics[]{}
 
+\begin{center}
+\begin{tikzpicture}[scale=2]
+	\draw[fill=green!30!blue!60,rounded corners=10pt] (0,0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+	\draw (.5,.5) node{$\Gamma_z$};
+	\draw[->] (1,.4) -- (1,.6);
+	\draw (1,.5) node[anchor=west]{$z(t)$};
+\end{tikzpicture}
+\end{center}
+
+
+
 Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respectivement les parties réelles et imaginaires de $z$.
 
 En effet :
@@ -259,7 +270,7 @@ Pour un $z \in \mathcal{E}$, il vient que l'aire du domaine délimité par l'ima
 
 %Prouvons que cette majoration est optimale et que le $z$ l'atteignant ne peut qu'être un cercle.
 
-Pour un $z \in \mathcal{E}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, Nous voulons prouver que $z = c_0 + c_1 e_1$ soit un cercle. L'idée est de regarder la déviation $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ \footnote{$H^1 = \{ w \in L^2(\R), \exists g \text{ dérivé au sens des distributions} \}$ et $\Vert w \Vert_{H^1} = \Vert w \Vert_{L^2} + \Vert g \Vert_{L^2}$} lorsque $A=\pi$.
+Pour un $z \in \mathcal{E}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, Nous voulons prouver que $z = c_0 + c_1 e_1$ soit un cercle. L'idée est de regarder la déviation $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ \footnote{$H^1 = \{ w \in L^2(\R), \exists g \in L^2\text{ dérivée au sens des distributions} \}$ et $\Vert w \Vert_{H^1} = \Vert w \Vert_{L^2} + \Vert g \Vert_{L^2}$} lorsque $A=\pi$.
 
 Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2} (n^2-n)$, cette majoration donne :
 
@@ -293,8 +304,9 @@ Donc les solutions du problème sont de la forme $z(s) = c_0+c_1e^{is}$.
 
 De plus $|z'(s)|=|c_1e^{is}| = |c_1| = 1$.
 
-\underline{Conclusion} :  
-
+% \underline{Conclusion} :
+\ss
+On peut résumer ces résultats en un théorème : 
 \begin{thm}
 Soit $z \in \mathcal{E} (\subset L^2([-\pi,\pi]))$ tel que $z = \sum_{n \in \Z}{c_n e_n}$ et soit $w = z-  \left(c_0 + c_1 e_1\right) \in L^2([\pi,\pi])$.
 
@@ -374,7 +386,7 @@ Alors $\phi\colon\R\to\R$ est convexe et vérifie $\phi(0)=J(y)$. De plus, $\phi
 
 
 \begin{proof}
-La convexité de $\phi$ est immdiate : il suffit de calculer sa dérivée seconde, qui est positive.
+La convexité de $\phi$ est immdiate : il suffit de calculer sa dérivée seconde, qui est positive ($\phi$ admet bien des dérivées directionnelles : il suffit de calculer $\lim_{h\to 0}\frac{\phi(t+h)-\phi(h)}{h})$.
 On se fixe une fonction admissible $\eta$. Supposons que $\phi'(0)=0$. On a alors :
 \begin{eqnarray*}
 0=\phi'(0) &=& \lim_{t\to 0}\dfrac{\phi(t)-\phi(0)}{t}\\
