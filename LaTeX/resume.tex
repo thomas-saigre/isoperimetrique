@@ -191,7 +191,7 @@ Nous voulons résoudre le problème iso-périmétrique \ref{ia} avec $p_0=2\pi$ 
 \[\max_{z \in \mathcal{E}} \A(z) \label{eq:p}\tag{$\P$}\]
 
 
-Avec $\mathcal{E} = \{ z \in C^1([-\pi,\pi], \R), z(-\pi)=z(\pi), |z'(s)|=1 \}$.
+Avec $\mathcal{E} = \{ z \in C^1([-\pi,\pi], \mathbb{C}), z(-\pi)=z(\pi), |z'(s)|=1 \}$.
 
 Et $\A(z) = \frac{1}{2} \Im\left(\int_{-\pi}^{\pi}{\bar z(t) z'(t) dt}\right) = \frac{1}{2} \int_{-\pi}^{\pi}{x\d y-y\d x}$.
 
@@ -208,7 +208,7 @@ Et $\A(z) = \frac{1}{2} \Im\left(\int_{-\pi}^{\pi}{\bar z(t) z'(t) dt}\right) = 
 
 
 
-Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respectivement les parties réelles et imaginaires de $z$.
+Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respectivement les parties réelle et imaginaire de $z$.
 
 En effet :
 \[ \p(z) = \int_{-\pi}^{\pi}{|z'(t)|dt} = 2\pi = p_0 \label{eq:e}\tag{\textsf{I}}\]
@@ -218,8 +218,8 @@ En effet :
 On a l'équivalence :
 \begin{eqnarray*}
 \ref{ia} &\Longleftrightarrow& \max_{D \in \C} \A(D) \text{ avec } \C = \{ D \in K, \p(D) = 2\pi \} \\
-&\underset{\ref{eq:g}}{\Longleftrightarrow}& \max_{z \in \mathcal{E}'} \A(\Gamma_z) \text{ avec } \mathcal{E}' = \{ z \in \C^1([-\pi,\pi]), \p(z) = 2\pi \} \\
-&\underset{\ref{eq:e}+\ref{eq:f}}{\Longleftrightarrow}& \max_{z \in \mathcal{E}} \A(z) \text{ avec } \mathcal{E} = \{ z \in \C^1,  z(-\pi)=z(\pi), |z'(s)|=1 \}
+&\underset{\ref{eq:g}}{\Longleftrightarrow}& \max_{z \in \mathcal{E}'} \A(\Gamma_z) \text{ avec } \mathcal{E}' = \{ z \in \C^1([-\pi,\pi],\mathbb{C}), \p(z) = 2\pi \} \\
+&\underset{\ref{eq:e}+\ref{eq:f}}{\Longleftrightarrow}& \max_{z \in \mathcal{E}} \A(z) \text{ avec } \mathcal{E} = \{ z \in \C^1([-\pi,\pi],\mathbb{C}),  z(-\pi)=z(\pi), |z'(s)|=1 \}
 \end{eqnarray*}
 
 \subsection[Résolution du problème]{Résolution du problème \cite{fuglede86}}
