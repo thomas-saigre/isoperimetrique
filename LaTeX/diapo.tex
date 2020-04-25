@@ -45,7 +45,7 @@
 \newcommand{\R}{\mathbb{R}}
 \newcommand{\Z}{\mathbb{Z}}
 \newcommand{\C}{\mathcal{C}}
-\renewcommand{\d}{\mathrm{d}}
+\renewcommand{\d}{\mathsf{d}}
 \renewcommand{\P}{\mathcal{P}}
 \renewcommand{\phi}{\varphi}
 \newcommand{\A}{\mathsf{Aire}}
@@ -139,16 +139,36 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
 \begin{frame}{Maximisation d'une surface à périmètre constant}
 
 \begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Théorème}
-        La solution du problème \emph{isopérimétrique} (ou \emph{iso-aire}) sans condition est un cercle.
+        La solution du problème \emph{isopérimétrique} (ou \emph{iso-aire}) avec $p_0=2\pi$ sans condition est un cercle.
 \end{beamerboxesrounded}
-\vspace{\baselineskip}
+% \vspace{\baselineskip}
 
-Pour prouver le théorème, on utilise la théorie de Fourier.
 
-On pose une fonction $z: [-\pi,\pi] \rightarrow \R^2$ de classe $C^1$ tel que $z(-\pi)=z(\pi)$, s'écrivant : $z = \sum_{n \in \Z}{c_n e_n}$.
+\begin{proof}[Démonstration : \emph{dans le cas d'un arc $\C^1$}]
 
-Le but est de prouver que $z = c_0 + c_1 e_1$.
+\only<1>{%
+    Pour prouver le théorème, on utilise la théorie de Fourier.
 
+    On pose une fonction $z: [-\pi,\pi] \rightarrow \R^2$ de classe $C^1$ tel que $z(-\pi)=z(\pi)$, s'écrivant $z = \sum_{n \in \Z}{c_n e_n}$, où $e_n=s\mapsto e^{ins}$ avec $n\in\Z$ et $s\in[-\pi,\pi]$.
+
+    Le but est de prouver que $z = c_0 + c_1 e_1$.
+
+    On montre (par des calculs) : $A=\pi\sum_{n\in\Z}n|c_n|^2$, où $A$ désigne l'air du domaine délimité par $z$ ($\Gamma_z$).
+
+    Comme le périmètre de $\Gamma_z$ vaut $2\pi$,
+    $\sum_{n\in\Z}n^2|c_n|^2=\int_{-\pi}^\pi |z'(s)|\d s=2\pi$.
+}
+\only<2>{%
+    Astuce magique : $n\leqslant n^2$ d'où $A = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi$
+    \ss
+
+    Condition d'optimalité : $A\leqslant\pi$, et le cercle vérifie cette condition.
+    \ss
+
+    On introduit la \emph{déviation} $w(s)=z(s)-(c_0+c_1e^{is})$, et on montre que $\Vert w\Vert_{H^1}=0$ (avec la majoration $1+n^2\leqslant \frac{5}{2}(n^2-n)$ pour $n\neq 0,1$) : donc $z$ est un cercle.
+
+}
+\end{proof}
 \end{frame}
 
 
@@ -217,6 +237,17 @@ Le but est de prouver que $z = c_0 + c_1 e_1$.
         Le demi-cercle $y(x)=\sqrt{\ell^2-x^2}$ est solution du problème iso-aire en prenant $A_0=\frac{\pi}{2}\ell^2$. Il est donc solution du problème de Didon pour le choix de $p_0=\pi\ell$.
     }
 
+    \begin{beamerboxesrounded}[upper=titreV,lower=texteV,shadow=true]{Rappel de cours (dimension infinie)}
+        Un point critique d'un fonction differentiable convexe est un minimum.
+    \end{beamerboxesrounded}
+
+
+
+    \begin{proof}
+    On montre que la fonction $y$ est un point critique de la fonction convexe $J\colon f\mapsto \int_{-\ell}^\ell \sqrt{1+f'(t)}\d t$. 
+    à finir !!
+    \end{proof}
+
 \end{frame}
 
 
@@ -245,7 +276,7 @@ Le but est de prouver que $z = c_0 + c_1 e_1$.
 \begin{frame}
     \frametitle{Algorithme d'Uzawa}
     
-    Nous allons utiliser l'algorithme d'Uzawa projetté :
+    Nous allons utiliser l'algorithme d'Uzawa projeté (on effectue une projection pour voir un résultat positif, sans à ajouter de contrainte supplémentaire) :
     
     \begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Formule du Lagrangien}
         Le Lagrangien s'écrit :
@@ -259,6 +290,10 @@ Le but est de prouver que $z = c_0 + c_1 e_1$.
     
     De même, nous ne voulons pas $\max_{\sigma} \lambda_k + \sigma (A(f)-a_0)$ mais juste : $\lambda_{k+1} = \lambda_k + \sigma (A(f)-a_0) > \lambda_k$.
     
+    \ss
+
+    Il s'agit d'une variante d'Uzawa (méthode d'Arrow--Huzwicz) : les étapes de recherches des \emph{min} et \emph{max} sont remplacées par des méthodes de gradient (montant ou descendant)
+
 \end{frame}
 
 \begin{frame}
@@ -297,7 +332,7 @@ Le but est de prouver que $z = c_0 + c_1 e_1$.
     \frametitle{Présentation des algorithmes (2/3)}
     
     \begin{algorithm}[H]
-    \caption{Renvoie le pas pseudo-optimal pour la variable primale}
+    \caption{recherche\_rho : Renvoie le pas pseudo-optimal pour la variable primale}
     \label{algo:primale}
 
         \KwIn{$f \in \R^n$ et $\lambda \in \R$}
@@ -327,7 +362,7 @@ Le but est de prouver que $z = c_0 + c_1 e_1$.
     \frametitle{Présentation des algorithmes (3/3)}   
     
     \begin{algorithm}[H]
-        \caption{Renvoie le pas pseudo-optimal pour la variable duale}
+        \caption{recherche\_sigma : Renvoie le pas pseudo-optimal pour la variable duale}
         \label{algo:duale}
     
         \KwIn{$f \in \R^n$ et $\lambda \in \R$}
