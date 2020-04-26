@@ -264,11 +264,61 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
 
 
     \begin{proof}
-    On montre que la fonction $y$ est un point critique de la fonction convexe $J\colon f\mapsto \int_{-\ell}^\ell \sqrt{1+f'(t)}\d t$.
-    Pour ce faire, on pose $\phi\colon t\in\R\mapsto J(y+t\eta)$ avec $\eta$ telle que $\eta(-\ell)=\eta(\ell)=0$ et $\int_{-\ell}^\ell \eta=0$, puis on montre que $\phi'(0)=0$.
+
+    On montre que la fonction $y$ résout la fonction d'Euler associée au problème.
+    
+    Soit $J$ la convexe $J\colon f\mapsto \int_{-\ell}^\ell \sqrt{1+f'(t)}\d t$.
+    On pose $\phi\colon t\in\R\mapsto J(y+t\eta)$ avec $\eta$ telle que $\eta(-\ell)=\eta(\ell)=0$ et $\int_{-\ell}^\ell \eta=0$, puis on montre que $\phi'(0)=0$.
     \end{proof}
+\end{frame}
+    
+\begin{frame}
+\frametitle{Preuve (\insertslidenumber{}/4)}
+\only<1>{%
+    \begin{eqnarray*}
+    \phi'(0) &=& \lim_{t\to 0}\dfrac{\phi(t)-\phi(0)}{t}\\
+            &=& \lim_{t\to0}\frac{J(y+t\eta)-J(y)}{t}\\
+            &=& \lim_{t\to0}\frac{1}{t}\left(\int_{-\ell}^\ell\sqrt{1+\left((y(x)+t\eta(x))'\right)^2}-\sqrt{1+y'(x)^2}\d x\right)\\
+            &=& \lim_{t\to0}\frac{1}{t}\int_{-\ell}^\ell\frac{1+\left((y(x)+t\eta(x))'\right)^2-(1+y'(x)^2)}{\sqrt{1+(y(x)+t\eta(x))'^2}+\sqrt{1+y'(x)^2}}\\
+            &=& \lim_{t\to 0}\frac{1}{t}\int_{-\ell}^\ell \frac{2ty'(x)\eta'(x)+t\eta'(x)}{\text{idem}}\d x\\
+            &=& \int_{-\ell}^\ell\frac{y'(x)\eta'(x)}{\sqrt{1+y'(x)^2}}\d x
+\end{eqnarray*}
+}
+\only<2>{%
+    Rappel : $y(x)=\sqrt{\ell^2-x^2}$, avec une IPP :
+    \begin{eqnarray*}
+    \phi'(0) &=&\int_{-\ell}^\ell\frac{y'(x)\eta'(x)}{\sqrt{1+y'(x)^2}}\d x = \left[\frac{-\eta(x) x}{\ell}\right]_{-\ell}^\ell + \int_{-\ell}^\ell\frac{\eta(x)}{\ell}\d x\\
+     &=& 0\qquad \text{car $\eta(-\ell)=\eta(\ell)=0$ et $\int\eta=0$}
+    \end{eqnarray*}
+}
+\only<3>{%
+    \begin{eqnarray*}
+    0=\phi'(0) &=& \lim_{t\to0}\frac{J(y+t\eta)-J(y)}{t}\\
+            &=& \lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}J(y+t(\eta-y+y))-J(y)\right)\\
+            &=& \lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}J((1-t)y+t(\eta+y))-J(y)\right)\\
+            &\leqslant&\lim_{t\to0}\frac{1}{t}\left(\vphantom{\frac{1}{2}}(1-t)J(y)+tJ(\eta+y)-J(y)\right)\quad\text{par convexité de $J$}\\
+            &=& \lim_{t\to0}\frac{1}{t}\left(-tJ(y)+tJ(\eta+y)\right)\\
+            &=& -J(y)+J(\eta+y)
+    \end{eqnarray*}
+    \center{\fbox{$J(y) \leqslant J(y+\eta)$}}
+}
+\only<4>{%
+    \center{\fbox{$J(y) \leqslant J(y+\eta)$}}
+
+    Cela étant vrai $\forall\eta$ telle que $\eta(-\ell)=\eta(\ell)=0$ et $\int\eta=0$ :
+    $$J(y)\leqslant J(f)\quad \forall f\text{ avec }f(-\ell)=f(\ell)=0\int f=A_0$$
+    ($f=y+\eta$ avec $\eta$ bien choisi)
+}
+
+
+
+
 
 \end{frame}
+
+
+
+
 
 
 
