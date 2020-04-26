@@ -196,16 +196,17 @@ Avec $\mathcal{E} = \{ z \in C^1([-\pi,\pi], \mathbb{C}), z(-\pi)=z(\pi), |z'(s)
 Et $\A(z) = \frac{1}{2} \Im\left(\int_{-\pi}^{\pi}{\bar z(t) z'(t) dt}\right) = \frac{1}{2} \int_{-\pi}^{\pi}{x\d y-y\d x}$.
 
 %\includegraphics[]{}
-
-\begin{center}
-\begin{tikzpicture}[scale=2]
-	\draw[fill=green!30!blue!60,rounded corners=10pt] (0,0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
-	\draw (.5,.5) node{$\Gamma_z$};
-	\draw[->] (1,.4) -- (1,.6);
-	\draw (1,.5) node[anchor=west]{$z(t)$};
-\end{tikzpicture}
-\end{center}
-
+\begin{figure}
+    \begin{center}
+    \begin{tikzpicture}[scale=2]
+	    \draw[fill=green!30!blue!60,rounded corners=10pt] (0,0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+	    \draw (.5,.5) node{$\Gamma_z$};
+	    \draw[->] (1,.4) -- (1,.6);
+	    \draw (1,.5) node[anchor=west]{$z(t)$};
+    \end{tikzpicture}   
+    \end{center}
+    \caption{Correspondance domaine fonction}
+\end{figure}
 
 
 Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respectivement les parties réelle et imaginaire de $z$.

@@ -10,6 +10,7 @@
 \usepackage{pgf,tikz}
 \usepackage[ruled,french]{algorithm2e}
 \usepackage{multicol}
+\usepackage{subfigure}
 
 \author[Thomas S. \& Romain V.]{Thomas Saigre \& Romain Vallet}
 
@@ -115,7 +116,7 @@ Nous pouvons rajouter des contraintes sur $\C$.
 \begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Definition}
         Un \emph{problème iso-aire} est un problème d'optimisation qui vise à trouver un domaine de $\R^2$ (plus d'autres conditions) qui minimise le périmètre pour une aire constante :
         \[\min_{D \in \C} \p(D) \label{ip}\tag{\IP}\]
-        Avec $\mathcal{C} = \{ D \text{ convexe borné de } \R^2, \A(D)=c \}$ avec $c \in R^+$ une constante.
+        Avec $\mathcal{C} = \{ D \text{ convexe borné de } \R^2, \A(D)=c \}$ avec $c \in \R^+$ une constante.
 \end{beamerboxesrounded}
 
 Nous pouvons rajouter des contraintes sur $\C$.
@@ -147,26 +148,44 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
 \begin{proof}[Démonstration : \emph{dans le cas d'un arc $\C^1$}]
 
 \only<1>{%
-    Pour prouver le théorème, on utilise la théorie de Fourier.
-
-    On pose une fonction $z: [-\pi,\pi] \rightarrow \mathbb{C}$ de classe $C^1$ tel que $z(-\pi)=z(\pi)$, s'écrivant $z = \sum_{n \in \Z}{c_n e_n}$, où $e_n=s\mapsto e^{ins}$ avec $n\in\Z$ et $s\in[-\pi,\pi]$.
-
-    Le but est de prouver que $z = c_0 + c_1 e_1$ (équation d'un cercle).
-
-    On montre (par des calculs) : $A=\pi\sum_{n\in\Z}n|c_n|^2$, où $A$ désigne l'air du domaine délimité par $z$ ($\Gamma_z$).
-
-    Comme le périmètre de $\Gamma_z$ vaut $2\pi$,
-    $\sum_{n\in\Z}n^2|c_n|^2=\int_{-\pi}^\pi |z'(s)|\d s=2\pi$.
+    Le problème est équivalent à trouver une fonction $z: [-\pi,\pi] \rightarrow \mathbb{C}$ de classe $C^1$ tel que $z(-\pi)=z(\pi)$ et $|z'| \equiv 1$ tel que son aire est maximale :
+    \begin{itemize}
+        \item $Aire(z)=\frac{1}{2}\Im\left(\int_{-\pi}^{\pi}{\bar{z}z'} \right)$
+        \item $perimetre(z) = \int_{-\pi}^{\pi}{|z'|} = 2\pi$
+    \end{itemize}
+    
+    \begin{figure}
+    \begin{center}
+    \begin{tikzpicture}[scale=2]
+	    \draw[fill=green!30!blue!60,rounded corners=10pt] (0,0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
+	    \draw (.5,.5) node{$\Gamma_z$};
+	    \draw[->] (1,.4) -- (1,.6);
+	    \draw (1,.5) node[anchor=west]{$z(t)$};
+    \end{tikzpicture}
+    \end{center}    
+    \caption{Correspondance domaine fonction}
+    \end{figure}
 }
+    
 \only<2>{%
-    Astuce magique : $n\leqslant n^2$ d'où $A = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi$
-    \ss
+    Comme $z \in L^2$, par la \textbf{Théorie de Fourier}, $z = \sum_{n \in \Z}{c_n e_n}$, où $e_n=s \mapsto e^{ins}$ avec $n\in\Z$ et $s \in [-\pi,\pi]$.
 
-    Condition d'optimalité : $A\leqslant\pi$, et le cercle vérifie cette condition.
-    \ss
+    Le but est de prouver que si $Aire(z)$ est maximale alors $z = c_0 + c_1 e_1$ (correspondant à un cercle).
 
-    On introduit la \emph{déviation} $w(s)=z(s)-(c_0+c_1e^{is})$, et on montre que $\Vert w\Vert_{H^1}=0$ (avec la majoration $1+n^2\leqslant \frac{5}{2}(n^2-n)$ pour $n\neq 0,1$) : donc $z$ est un cercle.
+    D'une part : $Aire(z)=\pi\sum_{n\in\Z}n|c_n|^2$.
 
+    D'autre part : $\sum_{n\in\Z}n^2|c_n|^2=\int_{-\pi}^\pi |z'(s)|\d s=1$.
+}
+
+\only<3>{%
+    Astuce magique : $n\leqslant n^2$ d'où $Aire(z) = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi$
+
+    \textbf{Condition d'optimalité} : $Aire(z) \leqslant \pi$, et $z = c_0 + c_1 e_1$ vérifie cette condition.
+
+    On introduit la \emph{déviation} $w=z-(c_0+c_1e_1)$, et on montre, avec la majoration $1+n^2\leqslant \frac{5}{2}(n^2-n)$ pour $n\neq 0,1$, que :
+    \[ \Vert w\Vert_{H^1} \leq \frac{5}{2} \left(1-\frac{Aire(z)}{\pi}\right) \]
+    
+    Si $Aire(z)=\pi$ alors $z=c_0+c_1e_1$ ce qui correspond à un \textbf{cercle}.
 }
 \end{proof}
 \end{frame}
@@ -266,8 +285,8 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
         \[\max_{f \in \left(\R^+\right)^n, \A(f)=a_0} lg(f)\]
         Avec :
         \begin{itemize}
-            \item Aire : $\A(f) = h \sum_{i=0}^n{f_i}$
-            \item Longueur : $lg(f) =  \sqrt{f_0^2+h^2} + \displaystyle\sum_{i=0}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+h^2}} + \sqrt{f_{n-1}^2+h^2} $
+            \item Aire : $\A(f) \simeq h \sum_{i=0}^n{f_i}$
+            \item Longueur : $lg(f) \simeq  \sqrt{f_0^2+h^2} + \displaystyle\sum_{i=0}^{n-1}{\sqrt{\vphantom{f_n^2}{(f_{i+1}-f_i)}^2+h^2}} + \sqrt{f_{n-1}^2+h^2} $
         \end{itemize}
     \end{beamerboxesrounded}
 
@@ -285,14 +304,12 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
             f, \lambda &\rightarrow & lg(f) + \lambda (\A(f)-a_0)
         \end{eqnarray*}
     \end{beamerboxesrounded}
-    
-    Mais au lieu de rechercher à chaque boucle $\min_{\rho} L(f_k - \rho \nabla L(f,\lambda))$ nous voulons juste : $L(f_{k+1}) = L(f_k - \rho \nabla L(f,\lambda)) < L(f_k)$.
-    
-    De même, nous ne voulons pas $\max_{\sigma} \lambda_k + \sigma (A(f)-a_0)$ mais juste : $\lambda_{k+1} = \lambda_k + \sigma (A(f)-a_0) > \lambda_k$.
-    
-    \ss
 
     Il s'agit d'une variante d'Uzawa (méthode d'Arrow--Huzwicz) : les étapes de recherches des \emph{min} et \emph{max} sont remplacées par des méthodes de gradient (montant ou descendant)
+    
+    Au lieu de rechercher $\rho$ maximisant $L(f_k - \rho \nabla L(f,\lambda))$, nous voulons $\rho$ tel que $L(f_{k+1}) = L(f_k - \rho \nabla L(f,\lambda)) < L(f_k)$.
+    
+    Au lieu de rechercher $\sigma$ minimisant $\lambda_k + \sigma (A(f)-a_0)$, nous voulons $\sigma$ tel que $\lambda_{k+1} = \lambda_k + \sigma (A(f)-a_0) > \lambda_k$.
 
 \end{frame}
 
