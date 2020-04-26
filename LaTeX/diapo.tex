@@ -53,7 +53,7 @@
 \newcommand{\p}{\mathsf{Per}}
 \newcommand{\IA}{\textsf{IA}}
 \newcommand{\IP}{\textsf{IP}}
-\renewcommand{\Im}{\mathrm{Im}}
+\renewcommand{\Im}{\mathsf{Im}}
 \renewcommand{\ss}{\vspace*{\baselineskip}}
 
 \definecolor{ttttff}{rgb}{0.2,0.2,1}
@@ -168,20 +168,23 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
 \only<2>{%
     Comme $z \in L^2$, par la \textbf{Théorie de Fourier}, $z = \sum_{n \in \Z}{c_n e_n}$, où $e_n=s \mapsto e^{ins}$ avec $n\in\Z$ et $s \in [-\pi,\pi]$.
 
-    Le but est de prouver que si $Aire(z)$ est maximale alors $z = c_0 + c_1 e_1$ (correspondant à un cercle).
-
-    D'une part : $Aire(z)=\pi\sum_{n\in\Z}n|c_n|^2$.
-
-    D'autre part : $\sum_{n\in\Z}n^2|c_n|^2=\int_{-\pi}^\pi |z'(s)|\d s=1$.
+    Le but est de prouver que si $Aire(z)$ est maximale alors $z = c_0 + c_1 e_1$ (correspondant à un cercle car $e_1(s)=e^{is}=\cos s+i\sin s$ dans le plan complexe, cela décrit un cercle).    
 }
 
 \only<3>{%
+    
+    D'une part : $Aire(z)=\pi\sum_{n\in\Z}n|c_n|^2$.
+
+    D'autre part : $\sum_{n\in\Z}n^2|c_n|^2=\int_{-\pi}^\pi |z'(s)|\d s=1$.
+
     Astuce magique : $n\leqslant n^2$ d'où $Aire(z) = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi$
 
-    \textbf{Condition d'optimalité} : $Aire(z) \leqslant \pi$, et $z = c_0 + c_1 e_1$ vérifie cette condition.
-
-    On introduit la \emph{déviation} $w=z-(c_0+c_1e_1)$, et on montre, avec la majoration $1+n^2\leqslant \frac{5}{2}(n^2-n)$ pour $n\neq 0,1$, que :
-    \[ \Vert w\Vert_{H^1} \leq \frac{5}{2} \left(1-\frac{Aire(z)}{\pi}\right) \]
+    \ss
+    \textbf{Condition d'optimalité} : $Aire(z) \leqslant \pi$, et le cercle $z = c_0 + c_1 e_1$ vérifie cette condition.    
+}
+\only<4>{%
+    On introduit la \emph{déviation} $w=z-(c_0+c_1e_1)$, qui est la distance de l'arc au cercle, et on montre, avec la majoration $1+n^2\leqslant \frac{5}{2}(n^2-n)$ pour $n\neq 0,1$, que :
+    \[ \Vert w\Vert_{H^1}^2 \leq \frac{5}{2} \left(1-\frac{Aire(z)}{\pi}\right) \]
     
     Si $Aire(z)=\pi$ alors $z=c_0+c_1e_1$ ce qui correspond à un \textbf{cercle}.
 }

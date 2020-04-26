@@ -277,7 +277,7 @@ Pour un $z \in \mathcal{E}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, nous voulons pro
 Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2} (n^2-n)$, cette majoration donne :
 
 \begin{eqnarray*}
-\Vert w\Vert_{H^1} &=& \frac{1}{2\pi} \int_{-\pi}^{\pi}{ (|w|^2+|w'|^2)\d s} \\
+\Vert w\Vert_{H^1}^2 &=& \frac{1}{2\pi} \int_{-\pi}^{\pi}{ (|w|^2+|w'|^2)\d s} \\
 &=& \sum_{n\in \Z\backslash \{0,1\}}{(|c_n|^2+ n^2|nc_n|^2)} \\
 &=& \sum_{n\in \Z\backslash \{0,1\}}{(1+n^2) |c_n|^2 } \\
 &\leqslant& \frac{5}{2} \sum_{n\in \Z\backslash \{0,1\}}{(n^2-n) |c_n|^2 } \\
@@ -316,7 +316,7 @@ D'une part :
 \[ \A(z) \leq \pi \]
 
 D'autre part :
-\[ \Vert w\Vert_{H^1} \leq \frac{5}{2} \left(1 - \frac{A}{\pi}\right) \label{in:s} \tag{\textsf{S}} \]
+\[ \Vert w\Vert_{H^1}^2 \leq \frac{5}{2} \left(1 - \frac{A}{\pi}\right) \label{in:s} \tag{\textsf{S}} \]
 
 La solution du problème \ref{eq:p} est atteint pour $A = \pi$ et $z = c_0 + c_1 e_1$. Ici $\Gamma_z$ est un \textbf{cercle}.
 \end{thm}
