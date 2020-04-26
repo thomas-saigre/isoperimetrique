@@ -187,7 +187,7 @@ Le sens réciproque se montre de la même manière.
 
 \subsection{Énoncé du problème}
 
-Nous voulons résoudre le problème iso-périmétrique \ref{ia} avec $p_0=2\pi$ avec comme contrainte que les domaines considérés soit à bord $\C^1$, ce problème se réécrit :
+Nous voulons résoudre le problème iso-périmétrique \ref{ia} avec $p_0=2\pi$ avec comme contrainte que les domaines considérés soient à bord $\C^1$, ce problème se réécrit :
 \[\max_{z \in \mathcal{E}} \A(z) \label{eq:p}\tag{$\P$}\]
 
 
@@ -206,6 +206,7 @@ Et $\A(z) = \frac{1}{2} \Im\left(\int_{-\pi}^{\pi}{\bar z(t) z'(t) dt}\right) = 
     \end{tikzpicture}   
     \end{center}
     \caption{Correspondance domaine fonction}
+    \label{fig:dom}
 \end{figure}
 
 
@@ -213,7 +214,7 @@ Pour $z\in \mathcal{C}$, nous notons $x$,$y : [-\pi,\pi] \rightarrow \R$ respect
 
 En effet :
 \[ \p(z) = \int_{-\pi}^{\pi}{|z'(t)|dt} = 2\pi = p_0 \label{eq:e}\tag{\textsf{I}}\]
-\[ \A(z) = \A(\Gamma_z) \text{ avec $\Gamma_z$ l'ensemble délimité par le graphe de $z$} \label{eq:f}\tag{\textsf{II}}\]
+\[ \A(z) = \A(\Gamma_z) \text{ avec $\Gamma_z$ l'ensemble délimité par le graphe de $z$ (cf figure \ref{fig:dom})} \label{eq:f}\tag{\textsf{II}}\]
 \[ \text{Tout convexe borné $D$ à bord $\C^1$ admet une fonction $z \in \C^1([-\pi,\pi])$ tel que $D=\Gamma_z$ } \label{eq:g}\tag{\textsf{III}}\]
 
 On a l'équivalence :
@@ -271,7 +272,7 @@ Pour un $z \in \mathcal{E}$, il vient que l'aire du domaine délimité par l'ima
 
 %Prouvons que cette majoration est optimale et que le $z$ l'atteignant ne peut qu'être un cercle.
 
-Pour un $z \in \mathcal{E}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, Nous voulons prouver que $z = c_0 + c_1 e_1$ soit un cercle. L'idée est de regarder la déviation $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ \footnote{$H^1 = \{ w \in L^2(\R), \exists g \in L^2\text{ dérivée au sens des distributions} \}$ et $\Vert w \Vert_{H^1} = \Vert w \Vert_{L^2} + \Vert g \Vert_{L^2}$} lorsque $A=\pi$.
+Pour un $z \in \mathcal{E}$ tel que $z=\sum_{n\in \Z}{c_ne_n}$, nous voulons prouver que $z = c_0 + c_1 e_1$ c'est-à-dire un cercle. L'idée est de regarder la \emph{déviation} $w(s) = z(s) - (c_0+c_1e^{is}) = \sum_{n\in \Z\backslash \{0,1\}}{c_ne_n}$ et de prouver que $\Vert w\Vert_{H^1} = 0$ \footnote{$H^1 = \{ w \in L^2(\R), \exists g \in L^2\text{ dérivée au sens des distributions} \}$ et $\Vert w \Vert_{H^1} = \Vert w \Vert_{L^2} + \Vert g \Vert_{L^2}$} lorsque $A=\pi$.
 
 Nous avons : $\forall n \in \Z \backslash \{0,1\}$, $1+n^2 \leqslant \frac{5}{2} (n^2-n)$, cette majoration donne :
 
@@ -437,8 +438,6 @@ Ainsi, d'après le théorème précédent, $y$ est solution du problème iso-air
 Pour résoudre le problème de Didon de manière numérique, nous allons résoudre le problème isoaire \ref{idp}, il se réécrit :
 \[ \sup_{\A(f)=a_0} \{ \p(f) \} \label{di}\tag{\DI} \]
 
-Nous prendrons $l = \pi$.
-
 La fonction $f$ étant une fonction dérivable sur $[-\ell, \ell]$ et $f(-\ell)=f(\ell)=0$.
 
 Avec $\A(f) = \int_{-\pi}^{\pi}{f(x)}dx$ et $\p(f) = \int_{-\pi}^{\pi}{\sqrt{1+f'(x)}dx}$
@@ -496,7 +495,7 @@ u &=& (\begin{matrix} 1 && ... && 1 \end{matrix})^T
 
 \subsubsection{Les algorithmes}
 
-Nous utilisons l'algorithme d'Uzawa projeté. Mais pour mettre à jour la variable primale ($f$), nous ne résolvons pas $\min L(f_k,\lambda_k)$ mais on s'assure que $L(f_{k+1},\lambda_k) < L(f_k,\lambda_k)$ avec $f_{k+1} = f_k - \rho_{k+1} \nabla_L(f_k,\lambda_k)$ (algorithme \ref{algo:primale}). De même pour la variable duale ($\lambda$), on s'assure que $\lambda_{k+1} > \lambda_k$ avec $\lambda_{k+1} = \lambda_k + \sigma_{k+1} (A(f)-a_0)$ (algorithme \ref{algo:duale}).
+Nous utilisons l'algorithme d'Uzawa projeté(on effectue une projection pour avoir un résultat positif, sans avoir à ajouter de contrainte supplémentaire). Mais pour mettre à jour la variable primale ($f$), nous ne résolvons pas $\min L(f_k,\lambda_k)$ mais on s'assure que $L(f_{k+1},\lambda_k) < L(f_k,\lambda_k)$ avec $f_{k+1} = f_k - \rho_{k+1} \nabla_L(f_k,\lambda_k)$ (algorithme \ref{algo:primale}). De même pour la variable duale ($\lambda$), on s'assure que $\lambda_{k+1} > \lambda_k$ avec $\lambda_{k+1} = \lambda_k + \sigma_{k+1} (A(f)-a_0)$ (algorithme \ref{algo:duale}).
 
 \begin{algorithm}
 \caption{Résout le problème de Didon par Uzawa}
@@ -583,7 +582,7 @@ Nous avons implémenté l'algorithme \ref{algo:didon} en Python. Pour le faire, 
 
 \vspace*{\baselineskip}
 
-On a montré précédemment (cf proposition \ref{prop:didon}) qu'en prenant $a_0=\frac{\pi}{2}$ (et $\ell=1$), la solution du problème est le demi-cercle d'équation $y=\sqrt{1-x^2}$. On peut donc comparer le résultats obtenu avec la solution réelle. La courbe obtenue est représentée en figure \ref{fig:tst_sol}. Pour l'exécution, nous avons pris $n=60$, et le programme a mis 35 secondes à s'exécuter. On voit que le résulats obtenu est assez proche de la solution exacte (la différence en norme 2 vaut environ 0.3).
+On a montré précédemment (cf proposition \ref{prop:didon}) qu'en prenant $a_0=\frac{\pi}{2}$ (et $\ell=1$), la solution du problème est le demi-cercle d'équation $y=\sqrt{1-x^2}$. On peut donc comparer le résultat obtenu avec la solution réelle. La courbe obtenue est représentée en figure \ref{fig:tst_sol}. Pour l'exécution, nous avons pris $n=60$, et le programme a mis 35 secondes à s'exécuter. On voit que le résulat obtenu est assez proche de la solution exacte (la différence en norme 2 vaut environ 0.3).
 
 \begin{figure}
 	\centering
@@ -636,7 +635,7 @@ De même, la solution obtenue avec $a_0=3$ est tracée en figure \ref{fig:3}. Ce
 
 \subsection{D'autres méthodes pour résoudre le problème}
 
-Nous allons dans un premier temps nous intéresser au Lagrangien augmenté \cite{cohen00}. Il s'agit ici de prendre une autre fonction pour le Lagrangien, le \emph{Lagrangien augmenté} :
+Nous allons nous intéresser au Lagrangien augmenté \cite{cohen00}. Il s'agit ici de prendre une autre fonction pour le Lagrangien, le \emph{Lagrangien augmenté} :
 
 \begin{eqnarray*}
 L_b(f,\lambda)&=& lg(f) + \lambda\left(A(f)-a_0\right) + \frac{b}{2}\left(A(f)-a_0\right)^2
