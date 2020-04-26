@@ -137,6 +137,10 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
 
 
 
+\section{Maximisation d'une surface à périmètre constant}
+
+
+
 \begin{frame}{Maximisation d'une surface à périmètre constant}
 
 \begin{beamerboxesrounded}[upper=titreB,lower=texteB,shadow=true]{Théorème}
@@ -144,16 +148,32 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
 \end{beamerboxesrounded}
 % \vspace{\baselineskip}
 
+\end{frame}
 
-\begin{proof}[Démonstration : \emph{dans le cas d'un arc $\C^1$}]
+\begin{frame}{Equivalence avec les fonctions(1/2)}
 
-\only<1>{%
-    Le problème est équivalent à trouver une fonction $z: [-\pi,\pi] \rightarrow \mathbb{C}$ de classe $C^1$ tel que $z(-\pi)=z(\pi)$ et $|z'| \equiv 1$ tel que son aire est maximale :
+\begin{beamerboxesrounded}[upper=titreV,lower=texteV,shadow=true]{Remarque}
+    Le problème est équivalent à trouver une fonction $z: [-\pi,\pi] \rightarrow \mathbb{C}$ de classe $C^1$ tel que $z(-\pi)=z(\pi)$ et $|z'| \equiv 1$ tel que son aire soit maximale :
+    \[ \underset{z \in C^1, |z'|\equiv 1}{max} Aire(z) \]
+\end{beamerboxesrounded}
+
+    En effet, on a une bijection :
+    \begin{eqnarray*}
+    \Omega \text{ domaine convexe borné à bord $C^1$ de perimètre $p_0$} \\ \longleftrightarrow \\ z: [-\pi,\pi] \rightarrow \mathbb{C} \text{ de classe $C^1$ tel que $z(-\pi)=z(\pi)$ et $|z'| \equiv 1$}
+    \end{eqnarray*}
+    
+    On écrit $\Gamma_z$ le graphe de $z$.
+
+\end{frame}
+
+\begin{frame}{Equivalence avec les fonctions(2/2)}
+
     \begin{itemize}
-        \item $Aire(z)=\frac{1}{2}\Im\left(\int_{-\pi}^{\pi}{\bar{z}z'} \right)$
-        \item $perimetre(z) = \int_{-\pi}^{\pi}{|z'|} = 2\pi$
+        \item $\text{ Aire de $\Gamma_z$} = Aire(z)=\frac{1}{2}\Im\left(\int_{-\pi}^{\pi}{\bar{z}z'} \right)$
+        \item $ \text{ perimètre de $\Gamma_z$} = perimetre(z) = \int_{-\pi}^{\pi}{|z'|} = 2\pi$
     \end{itemize}
     
+    \begin{figure}
     \begin{center}
     \begin{tikzpicture}[scale=2]
 	    \draw[fill=green!30!blue!60,rounded corners=10pt] (0,0) -- (0,1) -- (1,1) -- (1,0) -- cycle;
@@ -162,34 +182,92 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
 	    \draw (1,.5) node[anchor=west]{$z(t)$};
     \end{tikzpicture}
     \end{center}    
-    % \caption{Correspondance domaine fonction}
-}
-    
-\only<2>{%
-    Comme $z \in L^2$, par la \textbf{Théorie de Fourier}, $z = \sum_{n \in \Z}{c_n e_n}$, où $e_n=s \mapsto e^{ins}$ avec $n\in\Z$ et $s \in [-\pi,\pi]$.
+    \caption{Correspondance domaine fonction}
+    \end{figure}
 
-    Le but est de prouver que si $Aire(z)$ est maximale alors $z = c_0 + c_1 e_1$ (correspondant à un cercle car $e_1(s)=e^{is}=\cos s+i\sin s$ dans le plan complexe, cela décrit un cercle).    
-}
-
-\only<3>{%
-    
-    D'une part : $Aire(z)=\pi\sum_{n\in\Z}n|c_n|^2$.
-
-    D'autre part : $\sum_{n\in\Z}n^2|c_n|^2=\int_{-\pi}^\pi |z'(s)|\d s=1$.
-
-    Astuce magique : $n\leqslant n^2$ d'où $Aire(z) = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi$
-
-    \ss
-    \textbf{Condition d'optimalité} : $Aire(z) \leqslant \pi$, et le cercle $z = c_0 + c_1 e_1$ vérifie cette condition.    
-}
-\only<4>{%
-    On introduit la \emph{déviation} $w=z-(c_0+c_1e_1)$, qui est la distance de l'arc au cercle, et on montre, avec la majoration $1+n^2\leqslant \frac{5}{2}(n^2-n)$ pour $n\neq 0,1$, que :
-    \[ \Vert w\Vert_{H^1}^2 \leq \frac{5}{2} \left(1-\frac{Aire(z)}{\pi}\right) \]
-    
-    Si $Aire(z)=\pi$ alors $z=c_0+c_1e_1$ ce qui correspond à un \textbf{cercle}.
-}
-\end{proof}
 \end{frame}
+
+\begin{frame}{Suite de la preuve (1/5)}
+
+    Comme $z \in L^2$, par la \textbf{Théorie de Fourier}, $z = \sum_{n \in \Z}{c_n e_n}$, où $e_n=s \mapsto e^{ins}$ avec $n\in\Z$ et $s \in [-\pi,\pi]$. On note $z = x +i y$ avec $x$ et $y$ respectivement parties réelle et imaginaire de $z$.
+
+    Le but est de prouver que si $Aire(z)$ est maximale alors $z = c_0 + c_1 e_1$ ce qui correspond à un cercle.
+    
+\begin{beamerboxesrounded}[upper=titreV,lower=texteV,shadow=true]{Propiété}
+    Soit $z = c_0 + c_1 e_1$ avec $|z'| \equiv 1$ alors son graphe $\Gamma_z$ est un \textbf{cercle}.
+\end{beamerboxesrounded}
+    
+    \begin{proof}
+    On a $|z'(s)| = |c_1| = 1$ donc $c_1$ s'écrit $e^{is_1}$ avec $s_1 \in [\pi,\pi]$.
+     
+    Donc $\Gamma_z$, le graphe de $z = c_0 + e^{is_1} e_1$, est le résultat d'une rotation d'angle $s_1$ et d'une translation de $c_0$ du graphe de la fonction $e_1$ soit le cercle de centre $0$ et de rayon $1$ ($\Gamma_{e_1}=\{e^{is},s\in[-\pi,\pi]\}=\{(cos(s),sin(s)),s\in [-\pi,\pi]\}$). Alors $\Gamma_z$ est un cercle.
+    \end{proof}
+    
+\end{frame}
+
+\begin{frame}{Suite de la preuve (2/5)}
+
+    D'une part :
+    \begin{eqnarray*}
+    Aire(z) &=& \frac{1}{2} \Im \int_{-\pi}^{\pi}{\overline{z}(s) z'(s) \d s} \\
+    &=& \frac{1}{2} \Im \int_{-\pi}^{\pi}{ \sum_{n\in \Z}{\overline{c_n} e^{-ins}} \sum_{m\in \Z}{imc_n e^{ims}} \d s}\d s\\
+    &=& \frac{1}{2} \Im \sum_{n,m\in \Z}{ im c_m \overline{c_n} \int_{-\pi}^{\pi}{e^{ims}e^{-ins}} } \\
+    &=& \frac{1}{2} \Im \sum_{n,m\in \Z}{ im |c_m|^2 2\pi \delta_{n,m} } \\
+    &=& \pi \Im\left( i\sum_{n\in \Z}{ n c_n \overline{c_n}}\right) \\
+    Aire(z) &=&  \pi\sum_{n\in\Z}n|c_n|^2
+    \end{eqnarray*}
+
+\end{frame}
+
+\begin{frame}{Suite de la preuve (3/5)}
+
+    D'autre part :
+    \begin{eqnarray*}
+    perimetre(z) &=& \int_{-\pi}^\pi |z'(s)|\d s \\
+    &=& \int_{-\pi}^{\pi}{ \sum_{n \in \Z}{n c_n e^{ins}} \sum_{m \in \Z}{m \overline{c}_m e^{-ims}} \d s}\\
+    &=& \sum_{n,m \in \Z}{ nm c_n \overline{c}_m \int_{-\pi}^{\pi}{ e^{ins} e^{-ims} \d s} } \\
+    &=& \sum_{n,m \in \Z}{ nm c_n \overline{c}_m 2\pi \delta_{n,m} } \\
+    2\pi &=& 2\pi \sum_{n\in\Z}n^2|c_n|^2 \\
+    1 &=& \sum_{n\in\Z}n^2|c_n|^2
+    \end{eqnarray*}
+    
+\end{frame}
+
+\begin{frame}{Suite de la preuve (5/7)}
+
+    Astuce magique : $n\leqslant n^2$ d'où :
+    \[ Aire(z) = \pi \sum_{n\in \Z}{n|c_n|^2} \leqslant \pi \sum_{n\in \Z}{n^2|c_n|^2} = \pi\]
+    \ss
+
+    \textbf{Condition d'optimalité} : $Aire(z) \leqslant \pi$
+    \ss
+    
+    On remarque que pour $z=c_0+c_1e_1$ : $Aire(z) = \pi |c_1|^2 = \pi$. Le problème admet au moins une solution.
+    
+    Prouvons maintenant qu'elle est nécessairement de la forme $c_0+c_1e_1$.
+    
+\end{frame}
+
+\begin{frame}{Suite de la preuve (6/7)}
+    Ensuite, on introduit la \emph{déviation} $w=z-(c_0+c_1e_1)$, et, avec la majoration $1+n^2\leqslant \frac{5}{2}(n^2-n)$ pour $n\neq 0,1$, on a que :
+    \begin{eqnarray*}
+    \Vert w\Vert_{H^1}^2 &=& \frac{1}{2\pi} \int_{-\pi}^{\pi}{ (|w|^2+|w'|^2)\d s} \\
+    &=& \sum_{n\in \Z\backslash \{0,1\}}{(|c_n|^2+ n^2|nc_n|^2)} \text{ comme précédement} \\
+    &=& \sum_{n\in \Z\backslash \{0,1\}}{(1+n^2) |c_n|^2 } \\
+    &=& \frac{5}{2} \left( \sum_{n\in \Z\backslash \{0,1\}}{n^2|c_n|^2} - \sum_{n\in \Z\backslash \{0,1\}}{n|c_n|^2} \right) \text{ par la majoration} \\
+    \Vert w\Vert_{H^1}^2 &\leq& \frac{5}{2} \left(1-\frac{Aire(z)}{\pi}\right) \text{ Le terme de droite est appellé \textbf{déficit isométrique}.}
+    \end{eqnarray*}
+    
+\end{frame}
+
+\begin{frame}{Suite de la preuve (7/7)}
+    Nous avons : si $Aire(z)=\pi$ alors $\Vert w \Vert_{H^1} = 0$, alors $z=c_0+c_1e_1$.
+    \ss
+    
+    Nous avons prouver que le problème admet des solutions et quelles correspondent seulement au graphe de $c_0+c_1e_1$ (avec $c_0$ et $c_1$ $\in \mathbb{C}$ tel que $|c_1|=1$) soit un \textbf{cercle}.
+\end{frame}
+
+
 
 
 
