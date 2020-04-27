@@ -440,7 +440,7 @@ Pour résoudre le problème de Didon de manière numérique, nous allons résoud
 
 La fonction $f$ étant une fonction dérivable sur $[-\ell, \ell]$ et $f(-\ell)=f(\ell)=0$.
 
-Avec $\A(f) = \int_{-\pi}^{\pi}{f(x)}dx$ et $\p(f) = \int_{-\pi}^{\pi}{\sqrt{1+f'(x)}dx}$
+Avec $\A(f) = \int_{-\pi}^{\pi}{f(x)}\d x$ et $\p(f) = \int_{-\pi}^{\pi}{\sqrt{1+f'(x)}\d x}$
 
 Nous discrétisons $[-\ell, \ell]$ en $n+1$ intervalles (soit en $n+2$ points) de manière uniforme et on écrit $(x_i)_{i=-1,...,n}$ les points de la discrétisation (avec  $x_{-1}=-\ell$ et $x_n=\ell$) et on écrit $h=\frac{2l}{n+1}$ le pas de la discrétisation.
 
@@ -495,7 +495,7 @@ u &=& (\begin{matrix} 1 && ... && 1 \end{matrix})^T
 
 \subsubsection{Les algorithmes}
 
-Nous utilisons l'algorithme d'Uzawa projeté(on effectue une projection pour avoir un résultat positif, sans avoir à ajouter de contrainte supplémentaire). Mais pour mettre à jour la variable primale ($f$), nous ne résolvons pas $\min L(f_k,\lambda_k)$ mais on s'assure que $L(f_{k+1},\lambda_k) < L(f_k,\lambda_k)$ avec $f_{k+1} = f_k - \rho_{k+1} \nabla_L(f_k,\lambda_k)$ (algorithme \ref{algo:primale}). De même pour la variable duale ($\lambda$), on s'assure que $\lambda_{k+1} > \lambda_k$ avec $\lambda_{k+1} = \lambda_k + \sigma_{k+1} (A(f)-a_0)$ (algorithme \ref{algo:duale}).
+Nous utilisons l'algorithme d'Uzawa projeté (on effectue une projection pour avoir un résultat positif, sans avoir à ajouter de contrainte supplémentaire). Mais pour mettre à jour la variable primale ($f$), nous ne résolvons pas $\min L(f_k,\lambda_k)$ mais on s'assure que $L(f_{k+1},\lambda_k) < L(f_k,\lambda_k)$ avec $f_{k+1} = f_k - \rho_{k+1} \nabla_L(f_k,\lambda_k)$ (algorithme \ref{algo:primale}). De même pour la variable duale ($\lambda$), on s'assure que $\lambda_{k+1} > \lambda_k$ avec $\lambda_{k+1} = \lambda_k + \sigma_{k+1} (A(f)-a_0)$ (algorithme \ref{algo:duale}).
 
 \begin{algorithm}
 \caption{Résout le problème de Didon par Uzawa}
@@ -528,7 +528,7 @@ Nous utilisons l'algorithme d'Uzawa projeté(on effectue une projection pour avo
 La condition d'arrêt utlisée est $\Vert f_{k+1}-f_k\Vert_2 + |\lambda_{k+1}-\lambda_k| > precision$ et $k < k_{max}$ avec $k_{max}$ le maximum de boucles.
 
 \begin{algorithm}
-\caption{Renvoie le pas pseudo-optimal pour la variable primale}
+\caption{recherche\_rho : Renvoie le pas pseudo-optimal pour la variable primale}
 \label{algo:primale}
 
 	\KwIn{$f \in \R^n$ et $\lambda \in \R$}
@@ -551,7 +551,7 @@ La condition d'arrêt utlisée est $\Vert f_{k+1}-f_k\Vert_2 + |\lambda_{k+1}-\l
 \end{algorithm}
 
 \begin{algorithm}
-	\caption{Renvoie le pas pseudo-optimal pour la variable duale}
+	\caption{recherche\_sigma : Renvoie le pas pseudo-optimal pour la variable duale}
 	\label{algo:duale}
 	
 	\KwIn{$f \in \R^n$ et $\lambda \in \R$}
@@ -578,7 +578,7 @@ Le choix de $1.2$ et $1.3$ pour la mise à jour des pas $\rho$ et $\sigma$ est p
 
 \subsection{Implémentation et résultats}
 
-Nous avons implémenté l'algorithme \ref{algo:didon} en Python. Pour le faire, nous avons écrit une classe \texttt{fonction} ayant comme attribut un entier \texttt{n} (la taille du problème), et un tableau \texttt{vals} de taille $\texttt{n}-1$. Ce tableau contient les $n$ valeurs non nulles de la fonction, aux points $(x_i)_{0\leqslant i\leqslant n-1}$ À cela viennent s'ajouter des méthodes qui retournent l'aire et la longueur de la courbe, en prenant en compte les points \og fantômes \fg{} valant 0 aux deux extrémités.
+Nous avons implémenté l'algorithme \ref{algo:didon} en Python. Pour le faire, nous avons écrit une classe \texttt{fonction} ayant comme attribut un entier \texttt{n} (la taille du problème), et un tableau \texttt{vals} de taille $\texttt{n}-1$. Ce tableau contient les $n$ valeurs non nulles de la fonction, aux points $(x_i)_{0\leqslant i\leqslant n-1}$. À cela viennent s'ajouter des méthodes qui retournent l'aire et la longueur de la courbe, en prenant en compte les points \og fantômes \fg{} valant 0 aux deux extrémités.
 
 \vspace*{\baselineskip}
 
@@ -642,7 +642,7 @@ L_b(f,\lambda)&=& lg(f) + \lambda\left(A(f)-a_0\right) + \frac{b}{2}\left(A(f)-a
 \end{eqnarray*}
 
 L'algorithme de résolution reste le même que précédemment, la seule différence est la mise à jour du multiplicateur $\lambda$ : au lieu de rechercher le pas de sorte qu'on ait bien une remontée comme ci-dessus, on applique simplement la formule $\lambda^{n+1} = \lambda^n+b(A(f_k)-a_0)$, où $f_k$ est la solution du problème sans contrainte. La méthode que nous avons essayé d'implémenter comporte quelques défauts mais donne des résultats similaires à ce qu'on avait précédemment, mais obtenus en moins d'itérations.
-Par exemple, en prenant $a_0=4$, la méthode d'Uzawa \og normale \fg{} prenait au moins $2\cdot 10^5$ itérations (on atteignait le nombre maximal d'itération), tandis que le lagrangien augmenté converge en 1\,671 itérations. Le résultat, ainsi que l'évolution du Lagrangien sont donnés en figure \ref{fig:aug}.
+Par exemple, en prenant $a_0=4$, la méthode d'Uzawa \og normale \fg{} prenait au moins $2\times 10^5$ itérations (on atteignait le nombre maximal d'itération), tandis que le lagrangien augmenté converge en 1\,671 itérations. Le résultat, ainsi que l'évolution du Lagrangien sont donnés en figure \ref{fig:aug}.
 
 
 
