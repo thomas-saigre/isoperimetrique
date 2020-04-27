@@ -257,7 +257,7 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
     &=& \sum_{n\in \Z\backslash \{0,1\}}{(|c_n|^2+ n^2|nc_n|^2)} \text{ comme précédement} \\
     &=& \sum_{n\in \Z\backslash \{0,1\}}{(1+n^2) |c_n|^2 } \\
     &=& \frac{5}{2} \left( \sum_{n\in \Z\backslash \{0,1\}}{n^2|c_n|^2} - \sum_{n\in \Z\backslash \{0,1\}}{n|c_n|^2} \right) \text{ par la majoration} \\
-    \Vert w\Vert_{H^1}^2 &\leqslant& \frac{5}{2} \left(1-\frac{Aire(z)}{\pi}\right) \text{ Le terme de droite est appelé \textbf{déficit isométrique}.}
+    \Vert w\Vert_{H^1}^2 &\leqslant& \frac{5}{2} \left(1-\frac{Aire(z)}{\pi}\right) \text{ Le terme de droite est appelé \textbf{déficit isopémétrique}.}
     \end{eqnarray*}
     
 \end{frame}
@@ -436,7 +436,7 @@ Les problèmes \emph{isopérimétrique} et \emph{iso-aire} sont \textbf{équival
         \end{eqnarray*}
     \end{beamerboxesrounded}
 
-    Il s'agit d'une variante d'Uzawa (méthode d'Arrow--Huzwicz) : les étapes de recherches des \emph{min} et \emph{max} sont remplacées par des méthodes de gradient (montant ou descendant)
+    Il s'agit d'une variante d'Uzawa (méthode d'Arrow--Hurwicz) : les étapes de recherches des \emph{min} et \emph{max} sont remplacées par des méthodes de gradient (montant ou descendant)
     
     Au lieu de rechercher $\rho$ maximisant $L(f_k - \rho \nabla L(f,\lambda))$, nous voulons $\rho$ tel que $L(f_{k+1}) = L(f_k - \rho \nabla L(f,\lambda)) < L(f_k)$.
     
