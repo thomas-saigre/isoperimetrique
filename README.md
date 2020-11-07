@@ -1,6 +1,6 @@
 # Résolution du problème isopérimétrique
 
-Travail effectué par [Thomas Saigre](@thomas-saigre) et [Romain Vallet](@ValletRomain) dans le cadre de l'UE optimisation en M1 CSMI (année 2019 - 2020)
+Travail effectué par [Thomas Saigre](https://github.com/thomas-saigre) et [Romain Vallet](https://github.com/ValletRomain) dans le cadre de l'UE optimisation en M1 CSMI (année 2019 - 2020)
 
 
 ## Rapport et support de présentation
